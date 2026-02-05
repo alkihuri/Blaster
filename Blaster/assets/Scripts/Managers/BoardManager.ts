@@ -1,5 +1,8 @@
 import ManagerBase from './ManagerBase';
 
+ 
+const {ccclass, property} = cc._decorator;
+@ccclass
 export class BoardManager extends ManagerBase {
     private rows: number = 0;
     private cols: number = 0;

@@ -1,24 +1,24 @@
-
-export class ManagerBase {
+ 
+const {ccclass, property} = cc._decorator;
+@ccclass
+export default class ManagerBase  extends cc.Component {
 	protected container: any;
 	protected initialized: boolean = false;
 
 	constructor(container?: any) {
+		super();
 		this.container = container;
-	}
-
-	/** Called after the manager is constructed and registered in the container. */
+	}	
+ 
 	init(): void {
 		this.initialized = true;
 	}
-
-	/** Clean up resources, listeners, timers, etc. */
-	destroy(): void {
+ 
+	destroy(): boolean {
+		super.onDestroy();
 		this.initialized = false;
+		return true;
 	}
-
-	/** Optional per-frame update hook. */
-	update?(dt: number): void;
+  
 }
-
-export default ManagerBase;
+ 

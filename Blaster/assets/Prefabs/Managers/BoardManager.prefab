@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Tile",
+    "_name": "BoardManager",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -21,13 +21,10 @@
     "_components": [
       {
         "__id__": 2
-      },
-      {
-        "__id__": 3
       }
     ],
     "_prefab": {
-      "__id__": 4
+      "__id__": 3
     },
     "_opacity": 255,
     "_color": {
@@ -39,8 +36,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 112
+      "width": 0,
+      "height": 0
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -52,7 +49,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        2,
+        0,
         0,
         0,
         0,
@@ -77,47 +74,13 @@
     "_id": ""
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "7cf28FHpiJFSrFVG6bpMfJk",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "_materials": [
-      {
-        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
-      }
-    ],
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "bb54e62b-db4b-42ac-a49a-581682c07a99"
-    },
-    "_type": 0,
-    "_sizeMode": 1,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_atlas": null,
-    "_id": ""
-  },
-  {
-    "__type__": "a3991Lms7lEx6mPXP+Pr8CE",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "label": null,
-    "text": "hello",
     "_id": ""
   },
   {
@@ -126,7 +89,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "b0a43fde-2987-4b78-ad77-3e8da45df4f4"
+      "__uuid__": "eeebb82b-b82b-457e-9010-165f52ef51ff"
     },
     "fileId": "",
     "sync": false

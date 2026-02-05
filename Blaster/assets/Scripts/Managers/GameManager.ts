@@ -1,5 +1,8 @@
 import ManagerBase from './ManagerBase';
 
+ 
+const {ccclass, property} = cc._decorator;
+@ccclass
 export class GameManager extends ManagerBase {
     private boardManager: any = null;
     private scoreManager: any = null;

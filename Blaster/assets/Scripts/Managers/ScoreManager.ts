@@ -1,5 +1,8 @@
 import ManagerBase from './ManagerBase';
 
+ 
+const {ccclass, property} = cc._decorator;
+@ccclass
 export class ScoreManager extends ManagerBase {
     private score: number = 0;
 

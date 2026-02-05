@@ -4,10 +4,19 @@ import { BoardManager } from '../Managers/BoardManager';
 import { ScoreManager } from '../Managers/ScoreManager';
 import ManagerBase from '../Managers/ManagerBase';
 
-export class Bootstrapper {
+ 
+const {ccclass, property} = cc._decorator;
+@ccclass
+export class Bootstrapper extends cc.Component {
 
-    // listof managers to register
-    listOfManagers: ManagerBase[] = [];
+    // listof managers to register 
+    // reference in inspector to managers  
+ 
+
+    protected start(): void {
+        const container = Bootstrapper.init();
+    }
+
     static init(): ServiceContainer {
         const container = new ServiceContainer();
 
