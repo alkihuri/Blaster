@@ -8,17 +8,14 @@ import { ScoreManager } from "../Managers/ScoreManager";
 export class InitState extends StateBase {
 
 
-    update(dt: number): void {
-        throw new Error("Method not implemented.");
+    update(dt: number): void { 
+
     } 
 
     onEnter(): void {
         console.log('[InitState] enter');
- 
-        this.game.resolve<ScoreManager>('ScoreManager').reset();
-        this.game.resolve<GameManager>('GameManager').startGame();
-
-        this.stateMachine.PlayingState();
+  
+        this.stateMachine.goPlaying();
         
         
     }

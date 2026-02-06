@@ -1,15 +1,16 @@
 import { ServiceContainer } from "../DI/ServiceContainer";
 import { StateMachine } from "./StateMachine";
 
-export abstract class StateBase { 
+export abstract class StateBase {
 
-
-    public game : ServiceContainer;
     public stateMachine: StateMachine;
 
-    constructor(  stateMachine: StateMachine) {
-        this.game = stateMachine.serviceContainer;
+    constructor(stateMachine: StateMachine) {
         this.stateMachine = stateMachine;
+    }
+
+    public get game(): ServiceContainer {
+        return this.stateMachine.serviceContainer;
     }
     abstract onEnter(): void;
     abstract onExit(): void;

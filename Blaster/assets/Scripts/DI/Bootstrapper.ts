@@ -38,6 +38,8 @@ export default class Bootstrapper extends cc.Component {
         this.scoreManager.init(container);
         this.gameManager.init(container);
 
-        this.stateMachine.InjectContainer(container);
+        this.stateMachine.injectContainer(container);
+
+        this.stateMachine.goInit();
     }
 }

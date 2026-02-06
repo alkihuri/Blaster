@@ -109,15 +109,14 @@
     "_id": ""
   },
   {
-    "__type__": "a3991Lms7lEx6mPXP+Pr8CE",
+    "__type__": "095e6QVE5VPiKEcJ+ugkU8R",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
-    "label": null,
-    "text": "hello",
+    "type": 1,
     "_id": ""
   },
   {
