@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "GameManager",
+    "_name": "GameConfig",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -74,13 +74,15 @@
     "_id": ""
   },
   {
-    "__type__": "a89b4wl1yBEkr1KDhBAG0UD",
+    "__type__": "a1737JbvEtHUJeT6kfwv3Ip",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
     "_enabled": true,
+    "boardRows": 8,
+    "boardCols": 8,
     "_id": ""
   },
   {
@@ -89,7 +91,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "02586b43-9999-4640-85a0-f5829fa94716"
+      "__uuid__": "93c7ee40-0b75-4a27-a55f-6c76295a6382"
     },
     "fileId": "",
     "sync": false

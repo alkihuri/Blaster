@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "GameManager",
+    "_name": "ScoreManager",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -74,7 +74,7 @@
     "_id": ""
   },
   {
-    "__type__": "a89b4wl1yBEkr1KDhBAG0UD",
+    "__type__": "4e8a4GuMZVNvIfwkdPDBauK",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -89,7 +89,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "02586b43-9999-4640-85a0-f5829fa94716"
+      "__uuid__": "91c0df8b-0d34-460a-a11e-b9af7c082dd5"
     },
     "fileId": "",
     "sync": false

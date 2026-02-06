@@ -1,3 +1,4 @@
+import { ServiceContainer } from '../DI/ServiceContainer';
 import ManagerBase from './ManagerBase';
 
  
@@ -7,20 +8,11 @@ export class GameManager extends ManagerBase {
     private boardManager: any = null;
     private scoreManager: any = null;
 
-    constructor(container?: any) {
-        super(container);
-    }
+ 
 
-    init(): void {
-        super.init();
-        try {
-            if (this.container && this.container.resolve) {
-                this.boardManager = this.container.resolve('BoardManager');
-                this.scoreManager = this.container.resolve('ScoreManager');
-            }
-        } catch (e) {
-        }
-    }
+      init(container?: ServiceContainer): void {
+           super.init(container);
+       }
 
     startGame() {
         if (this.boardManager && this.boardManager.setupBoard) {

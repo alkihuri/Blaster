@@ -1,39 +1,43 @@
+
 import { ServiceContainer } from './ServiceContainer';
-import { GameManager } from '../Managers/GameManager';
 import { BoardManager } from '../Managers/BoardManager';
 import { ScoreManager } from '../Managers/ScoreManager';
-import ManagerBase from '../Managers/ManagerBase';
+import { GameManager } from '../Managers/GameManager';
+import  GameConfig from '../Core/GameConfig';
+import { StateMachine } from '../States/StateMachine';
 
- 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
+
 @ccclass
-export class Bootstrapper extends cc.Component {
+export default class Bootstrapper extends cc.Component {
 
-    // listof managers to register 
-    // reference in inspector to managers  
- 
+    @property(GameConfig)
+    gameConfig: GameConfig = null;
 
-    protected start(): void {
-        const container = Bootstrapper.init();
-    }
+    @property(BoardManager)
+    boardManager: BoardManager = null;
 
-    static init(): ServiceContainer {
-        const container = new ServiceContainer();
+    @property(ScoreManager)
+    scoreManager: ScoreManager = null;
 
-        const boardManager = new BoardManager(container);
-        const scoreManager = new ScoreManager(container);
-        const gameManager = new GameManager(container);
- 
+    @property(GameManager)
+    gameManager: GameManager = null;
 
-        container.register('BoardManager', boardManager);
-        container.register('ScoreManager', scoreManager);
-        container.register('GameManager', gameManager);
+    @property(StateMachine)
+    stateMachine: StateMachine = null;
 
-        boardManager.init();
-        scoreManager.init();
-        gameManager.init();
-         
+    start() {
+        const container = new ServiceContainer(this.gameConfig);
 
-        return container;
+        container.register('GameConfig', this.gameConfig);
+        container.register('BoardManager', this.boardManager);
+        container.register('ScoreManager', this.scoreManager);
+        container.register('GameManager', this.gameManager);
+
+        this.boardManager.init(container);
+        this.scoreManager.init(container);
+        this.gameManager.init(container);
+
+        this.stateMachine.InjectContainer(container);
     }
 }

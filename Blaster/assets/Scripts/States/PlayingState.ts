@@ -10,9 +10,6 @@ export class PlayingState extends StateBase {
 
     update(dt: number): void {
         throw new Error("Method not implemented.");
-    }
-    constructor(container: ServiceContainer) {
-        super(container);
     } 
 
     onEnter(): void {

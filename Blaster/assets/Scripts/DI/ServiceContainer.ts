@@ -1,4 +1,18 @@
+import GameConfig from "../Core/GameConfig";
+
 export class ServiceContainer {
+
+
+    public config: GameConfig; 
+
+    constructor(GameConfig: GameConfig) {
+        if (GameConfig) { 
+            this.config = GameConfig;
+        }
+    }
+
+
+
     private services = new Map<string, any>();
 
     public register<T>(key: string, instance: T) {
