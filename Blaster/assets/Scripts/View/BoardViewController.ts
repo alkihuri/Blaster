@@ -6,7 +6,8 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import GameConfig from "../Core/GameConfig";
-import TileViewController from "./TileViewController";
+import TileViewController, { TileClickCallback } from "./TileViewController";
+import BoardState from "../Core/BoardState";
 
 const {ccclass, property} = cc._decorator;
 
@@ -15,6 +16,7 @@ export default class BoardViewController extends cc.Component {
 
 
 tilesPool : TileViewController[] = [];
+tileGrid: TileViewController[][] = []; // 2D array to store tile references
 
 private tileSize : number;
 
@@ -25,6 +27,8 @@ private tileOffset : number = 5;
 
 @property({type: cc.Node})
 public tilesAnchor: cc.Node = null;
+
+private onTileClickCallback: TileClickCallback = null;
 
 protected onLoad(): void { 
     this.InitPool();
@@ -60,25 +64,50 @@ public GetTileFromPool() : TileViewController | null {
 @property(cc.Prefab)
 cellPrefab: cc.Prefab = null;
 
-    public   GenrateBoard(config : GameConfig)  {
+public setTileClickCallback(callback: TileClickCallback) {
+    this.onTileClickCallback = callback;
+}
 
+public GenrateBoard(config : GameConfig)  {
+    const rows = config.boardRows;
+    const cols = config.boardCols;
 
-        const rows = config.boardRows;
-        const cols = config.boardCols;
+    this.tileGrid = [];
 
-        var anchorBasePosition = this.tilesAnchor.position;
-        for(let i = 0; i < rows; i++){
-            for(let j = 0; j < cols; j++){
-                const tile = this.GetTileFromPool();
-                if(tile){
- 
-                    var tilePosition = cc.v3(j * this.tileSize + this.tileOffset, -i * this.tileSize + this.tileOffset).add(anchorBasePosition);
-                    tile.node.setPosition(tilePosition);  
-                    tile.node.active = true;
-                    tile.getComponent<TileViewController>(TileViewController).updateData(config.allowedTiles[Math.floor(Math.random() * config.allowedTiles.length)]);
-                }
+    var anchorBasePosition = this.tilesAnchor.position;
+    for(let i = 0; i < rows; i++){
+        this.tileGrid[i] = [];
+        for(let j = 0; j < cols; j++){
+            const tile = this.GetTileFromPool();
+            if(tile){
+
+                var tilePosition = cc.v3(j * this.tileSize + this.tileOffset, -i * this.tileSize + this.tileOffset).add(anchorBasePosition);
+                tile.node.setPosition(tilePosition);  
+                tile.node.active = true;
+                tile.setPosition(i, j, this.onTileClickCallback);
+                tile.updateData(config.allowedTiles[Math.floor(Math.random() * config.allowedTiles.length)]);
+                this.tileGrid[i][j] = tile;
             }
         }
     } 
+}
+ 
+public updateBoardFromState(boardState: BoardState) {
+    for(let row = 0; row < boardState.rows; row++) {
+        for(let col = 0; col < boardState.cols; col++) {
+            if(this.tileGrid[row] && this.tileGrid[row][col]) {
+                const tile = this.tileGrid[row][col];
+                const tileType = boardState.getTileAt(row, col);
+                const tileData = boardState.getTileDataByType(tileType);
+                
+                if(tileData) {
+                    tile.updateData(tileData);
+                } else {
+                    tile.node.active = false;
+                }
+            }
+        }
+    }
+}
 
 }
