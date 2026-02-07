@@ -5,6 +5,7 @@ import { ScoreManager } from '../Managers/ScoreManager';
 import { GameManager } from '../Managers/GameManager';
 import  GameConfig from '../Core/GameConfig';
 import { StateMachine } from '../States/StateMachine';
+import UIManager from '../Managers/UIManager';
 
 const { ccclass, property } = cc._decorator;
 
@@ -23,6 +24,9 @@ export default class Bootstrapper extends cc.Component {
     @property(GameManager)
     gameManager: GameManager = null;
 
+    @property (UIManager)
+    uiManager: UIManager = null;
+
     @property(StateMachine)
     stateMachine: StateMachine = null;
 
@@ -33,10 +37,13 @@ export default class Bootstrapper extends cc.Component {
         container.register('BoardManager', this.boardManager);
         container.register('ScoreManager', this.scoreManager);
         container.register('GameManager', this.gameManager);
+        container.register('UIManager', this.uiManager);
+        container.register('StateMachine', this.stateMachine);
 
         this.boardManager.init(container);
         this.scoreManager.init(container);
         this.gameManager.init(container);
+        this.uiManager.init(container);
 
         this.stateMachine.injectContainer(container);
 

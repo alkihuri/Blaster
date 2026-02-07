@@ -3,7 +3,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export class ContainerBase<T> extends cc.Component {
 
-    public Value: T;
+    private Value: T;
 
     public onValueChanged: (newValue: T) => void = null;
 
@@ -13,6 +13,10 @@ export class ContainerBase<T> extends cc.Component {
             this.onValueChanged(newValue);
         }
     }
+
+    public getValue(): T {
+        return this.Value;
+    }   
 }
 
 

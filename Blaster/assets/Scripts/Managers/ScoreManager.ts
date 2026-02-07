@@ -6,12 +6,18 @@ import ManagerBase from './ManagerBase';
 const {ccclass, property} = cc._decorator;
 @ccclass
 export class ScoreManager extends ManagerBase {
-    private score: IntContainer;
+    public  score: IntContainer;
 
     protected onLoad(): void {
         if (!this.score) {
             this.score = this.node.getComponent(IntContainer);
         }
+
+        if (!this.score) {
+            console.error("ScoreManager requires an IntContainer component on the same node.");
+        }
+
+        this.score.Value = 0; // Initialize score to 0
     }
 
     init(container?: ServiceContainer): void {
@@ -19,16 +25,14 @@ export class ScoreManager extends ManagerBase {
     }
 
     add(points: number) {
-        this.score.Value += points;
+        points = this.score.Value + points;
+        this.score.setValue(points);
+        console.log(`Score updated: ${this.score.Value}`);
     }
 
     reset() {
         this.score.Value = 0;
-    }
-
-    getScore(): number {
-        return this.score.Value;
-    }
+    } 
 }
 
 export default ScoreManager;

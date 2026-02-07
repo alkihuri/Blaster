@@ -58,4 +58,16 @@ export default class BoardState { // хотел сделать как состо
         newState.grid = this.grid.map(row => [...row]);
         return newState;
     }
+
+    public calculateScore(oldState: BoardState): number {
+        let score = 0;
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.cols; j++) {
+                if (this.grid[i][j] !== oldState.grid[i][j]) {
+                    score += 10;  
+                }
+            }
+        }
+        return score;
+    }
 }
