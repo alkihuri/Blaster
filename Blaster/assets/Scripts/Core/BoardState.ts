@@ -4,7 +4,7 @@ import { TileType } from "./TileType";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class BoardState {
+export default class BoardState { // хотел сделать как состояние и прокидывать конфиг но оставим как естЬ)))
     public grid: TileType[][] = [];
     public rows: number;
     public cols: number;
@@ -18,6 +18,8 @@ export default class BoardState {
     }
  
     public initialize(tileDataArray: TileData[]) {
+
+        console.log("Initializing BoardState with tiles data: " + tileDataArray.map(t => t.type).join(", ")); // Debug log
         this.grid = [];
         for (let i = 0; i < this.rows; i++) {
             const row: TileType[] = [];

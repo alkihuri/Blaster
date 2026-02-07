@@ -24,6 +24,9 @@ private tileSize : number;
 // TBD OFSET. FROM CONFIG
 
 private tileOffset : number = 5;
+private animationDuration: number = 0.2; // duration for fall animation
+private disappearDuration: number = 10.15; // duration for disappear animation
+private appearDuration: number = 10.1; // duration for appear animation
 
 @property({type: cc.Node})
 public tilesAnchor: cc.Node = null;
@@ -68,6 +71,68 @@ public setTileClickCallback(callback: TileClickCallback) {
     this.onTileClickCallback = callback;
 }
 
+private getTileWorldPosition(row: number, col: number): cc.Vec3 {
+    const anchorPos = this.tilesAnchor.position;
+    return cc.v3(
+        col * this.tileSize + this.tileOffset,
+        -row * this.tileSize + this.tileOffset
+    ).add(anchorPos);
+}
+
+private animateTileFall(
+    tile: TileViewController,
+    targetRow: number,
+    targetCol: number
+): Promise<void> {
+
+    const targetPos = this.getTileWorldPosition(targetRow, targetCol);
+
+    return new Promise(resolve => {
+
+        cc.Tween.stopAllByTarget(tile.node);
+
+        cc.tween(tile.node)
+            .to(this.animationDuration, {
+                x: targetPos.x,
+                y: targetPos.y
+            }, { easing: 'quadIn' })
+            .call(resolve)
+            .start();
+    });
+}
+
+
+private animateTileDisappear(tile: TileViewController): Promise<void> {
+    return new Promise((resolve) => {
+        cc.tween(tile.node)
+            .to(this.disappearDuration, { scale: 0, opacity: 0 })
+            .call(() => {
+                tile.node.active = false;
+                tile.node.scale = 1;
+                tile.node.opacity = 255;
+                resolve();
+            })
+            .start();
+    });
+}
+
+private animateTileAppear(tile: TileViewController): Promise<void> {
+    return new Promise(resolve => {
+
+        cc.Tween.stopAllByTarget(tile.node);
+
+        tile.node.active = true;
+        tile.node.scale = 0;
+        tile.node.opacity = 0;
+
+        cc.tween(tile.node)
+            .to(this.appearDuration, { scale: 1, opacity: 255 })
+            .call(resolve)
+            .start();
+    });
+}
+
+
 public GenrateBoard(config : GameConfig)  {
     const rows = config.boardRows;
     const cols = config.boardCols;
@@ -91,23 +156,77 @@ public GenrateBoard(config : GameConfig)  {
         }
     } 
 }
+
+public async updateBoardFromState(oldState: BoardState, newState: BoardState) {
+    const animationPromises: Promise<void>[] = [];
  
-public updateBoardFromState(boardState: BoardState) {
-    for(let row = 0; row < boardState.rows; row++) {
-        for(let col = 0; col < boardState.cols; col++) {
-            if(this.tileGrid[row] && this.tileGrid[row][col]) {
-                const tile = this.tileGrid[row][col];
-                const tileType = boardState.getTileAt(row, col);
-                const tileData = boardState.getTileDataByType(tileType);
-                
-                if(tileData) {
-                    tile.updateData(tileData);
-                } else {
-                    tile.node.active = false;
+    for(let row = 0; row < oldState.rows; row++) {
+        for(let col = 0; col < oldState.cols; col++) {
+            const oldType = oldState.getTileAt(row, col);
+            const newType = newState.getTileAt(row, col);
+            
+            if(oldType !== 0 && newType === 0) {  
+                if(this.tileGrid[row] && this.tileGrid[row][col]) {
+                    const tile = this.tileGrid[row][col];
+                    animationPromises.push(this.animateTileDisappear(tile));
+                    this.tileGrid[row][col] = null;
                 }
             }
         }
     }
+ 
+    console.log("STRART!");
+    //await(200);
+    if(animationPromises.length > 0) {
+        await Promise.all(animationPromises) ;
+        // animationPromises.clear(); // Clear the array for reuse
+        animationPromises.length = 0;
+    }
+ 
+    console.log("FINISH1!");
+    for(let row = 0; row < newState.rows; row++) {
+        if(!this.tileGrid[row]) {
+            this.tileGrid[row] = [];
+        }
+        
+        for(let col = 0; col < newState.cols; col++) {
+            const tileType = newState.getTileAt(row, col);
+            const tileData = newState.getTileDataByType(tileType);
+
+            if(tileData) {
+                let tile = this.tileGrid[row] && this.tileGrid[row][col];
+                let isNewTile = false;
+ 
+                if(!tile) {
+                    tile = this.GetTileFromPool();
+                    isNewTile = true;
+                }
+
+                if(tile) { 
+                    tile.updateData(tileData);
+                    tile.setPosition(row, col, this.onTileClickCallback);
+                    tile.node.active = true;
+ 
+                    const targetPos = this.getTileWorldPosition(row, col);
+                    tile.node.setPosition(targetPos);
+
+                    this.tileGrid[row][col] = tile;
+ 
+                    if(isNewTile) {
+                        animationPromises.push(this.animateTileAppear(tile));
+                    }
+                }
+            } else {
+                this.tileGrid[row][col] = null;
+            }
+        }
+    } 
+    if(animationPromises.length > 0) {
+        await Promise.all(animationPromises);
+    }
+
+    console.log("FINISH2!");
 }
+
 
 }

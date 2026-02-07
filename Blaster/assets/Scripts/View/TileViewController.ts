@@ -10,7 +10,7 @@ import { TileType } from "../Core/TileType";
 
 const {ccclass, property} = cc._decorator;
 
-export type TileClickCallback = (row: number, col: number, tile: TileViewController) => void;
+export type TileClickCallback = (row: number, col: number, tile: TileViewController) => Promise<void> | void;
 
 @ccclass
 export default class TileViewController extends cc.Component {
@@ -32,10 +32,9 @@ export default class TileViewController extends cc.Component {
         
         this.type = data.type;
         this.node.getComponent(cc.Sprite).spriteFrame = data.sprite;    
-        console.log("TileViewController updated with type: " + this.type);  
+        //console.log("TileViewController updated with type: " + this.type);  
     }
-    protected onLoad(): void {
-        // Add click listener
+    protected onLoad(): void { 
         this.node.on(cc.Node.EventType.MOUSE_DOWN, this.onTileClicked, this);
     }
 
@@ -45,7 +44,11 @@ export default class TileViewController extends cc.Component {
 
     private onTileClicked() {
         if (this.onClickCallback && this.row >= 0 && this.col >= 0) {
-            this.onClickCallback(this.row, this.col, this);
+            // Handle both sync and async callbacks
+            const result = this.onClickCallback(this.row, this.col, this);
+            if(result instanceof Promise) {
+                result.catch(err => console.error("Tile click callback error:", err));
+            }
         }
     }
 
@@ -56,6 +59,5 @@ export default class TileViewController extends cc.Component {
     public getCol(): number {
         return this.col;
     }
-
-    // update (dt) {}
+ 
 }

@@ -4,7 +4,7 @@ import { TileType } from "../Core/TileType";
 const { ccclass } = cc._decorator;
 
 @ccclass
-export default class BoardService {
+export default class BoardService {  
     
     private boardState: BoardState = null;
 

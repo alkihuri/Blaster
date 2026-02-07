@@ -17,22 +17,17 @@ export class BoardManager extends ManagerBase {
     private config : GameConfig = null;
     private boardService: BoardService = null;
     private boardState: BoardState = null;
+    private isAnimating: boolean = false;
 
     start() {
         this.config = this.container.resolve<GameConfig>('GameConfig');
-         
-        this.boardService = new BoardService();
-        this.container.register<BoardService>('BoardService', this.boardService);
         
         if(!this.config){
             console.error("GameConfig is not assigned in BoardManager");
         }
         if(this.boardViewController == null){
             console.error("BoardViewController is not assigned in BoardManager");
-            return;
         }
-         
-        this.boardViewController.setTileClickCallback(this.onTileClicked.bind(this));
     }
 
     public BuildUpBoard() { 
@@ -61,17 +56,33 @@ export class BoardManager extends ManagerBase {
         this.boardViewController.GenrateBoard(this.config);
     }
 
-    private onTileClicked(row: number, col: number) {
+
+    private  async onTileClicked(row: number, col: number){ 
+        await this.onTileClickedInternal( row, col);
+    }
+
+    private async onTileClickedInternal(row: number, col: number) { 
+        if(this.isAnimating) {
+            console.log("Animation in progress, click ignored");
+            return;
+        }
+
         console.log(`Tile clicked at [${row}, ${col}]`);
+        this.isAnimating = true;
+          
+        const oldState = this.boardState.clone();
          
         const newState = this.boardService.handleTileClick(row, col);
         
         if(newState) {
             console.log("Board state updated, rendering changes...");
-            this.boardViewController.updateBoardFromState(newState);
+            this.boardState = newState;
+            await this.boardViewController.updateBoardFromState(oldState, newState);
         } else {
             console.log("No matching tiles for this position");
         }
+
+        this.isAnimating = false;
     }
 
 }
