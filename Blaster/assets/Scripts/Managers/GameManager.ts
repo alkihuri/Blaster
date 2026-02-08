@@ -55,8 +55,8 @@ export class GameManager extends ManagerBase {
     }
 
      public MinusBooster() {
-        if(this.boosterCount.value > 0) {
-            this.boosterCount.setValue(this.boosterCount.value - 1);
+        if(this.boosterCount.getValue() > 0) {
+            this.boosterCount.setValue(this.boosterCount.getValue() - 1);
         } else {
             console.warn("No boosters left!");
         }
