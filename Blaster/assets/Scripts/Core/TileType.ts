@@ -4,6 +4,6 @@ export enum TileType {
     Green,
     Blue,
     Yellow,
-    Purple,
-    Bomb
+    Purple, 
+    Booster
 }

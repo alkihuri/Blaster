@@ -1,5 +1,6 @@
 import BoardState from "../Core/BoardState";
 import { TileType } from "../Core/TileType";
+import BoosterService from "./BoosterService";
 
 const { ccclass } = cc._decorator;
 
@@ -7,6 +8,7 @@ const { ccclass } = cc._decorator;
 export default class BoardService {  
     
     private boardState: BoardState = null;
+    private boosterService: BoosterService = new BoosterService();
 
     constructor() {}
  
@@ -27,6 +29,10 @@ export default class BoardService {
         const tileType = this.boardState.getTileAt(row, col);
         if (tileType === TileType.None) {
             return null;
+        }
+ 
+        if (this.boosterService.isBooster(tileType)) {
+            return this.handleBoosterClick(row, col);
         }
  
         const tilesToRemove = this.findMatchingTiles(row, col, tileType);
@@ -116,6 +122,69 @@ export default class BoardService {
                 }
             }
         }
+    }
+
+   
+    private handleBoosterClick(row: number, col: number, radius: number = 1): BoardState {
+        console.log(`Booster activated at [${row}, ${col}] with radius ${radius}`);
+        
+        let newState = this.boosterService.activateBooster(this.boardState, row, col, radius);
+        
+        if (!newState) {
+            console.error("Failed to activate booster");
+            return null;
+        }
+ 
+        this.applyGravity(newState);
+        this.fillEmptySpaces(newState);
+
+        this.boardState = newState;
+        return newState;
+    }
+ 
+    public handleLineBoosterClick(row: number, col: number): BoardState {
+        if (!this.boardState) {
+            console.error("Board state not initialized");
+            return null;
+        }
+
+        console.log(`Line Booster activated at [${row}, ${col}]`);
+        
+        let newState = this.boosterService.activateLineBooster(this.boardState, row, col);
+        
+        if (!newState) {
+            console.error("Failed to activate line booster");
+            return null;
+        }
+
+        this.applyGravity(newState);
+        this.fillEmptySpaces(newState);
+
+        this.boardState = newState;
+        return newState;
+    }
+
+   
+    public handleExplosionBoosterClick(row: number, col: number, explosionRadius: number = 2): BoardState {
+        if (!this.boardState) {
+            console.error("Board state not initialized");
+            return null;
+        }
+
+        console.log(`Explosion Booster activated at [${row}, ${col}] with radius ${explosionRadius}`);
+        
+        let newState = this.boosterService.activateExplosionBooster(this.boardState, row, col, explosionRadius);
+        
+        if (!newState) {
+            console.error("Failed to activate explosion booster");
+            return null;
+        }
+
+        this.applyGravity(newState);
+        this.fillEmptySpaces(newState);
+
+        this.boardState = newState;
+        return newState;
     } 
 
     public calculateScore(state: BoardState): number {
