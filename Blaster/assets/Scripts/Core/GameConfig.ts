@@ -6,20 +6,20 @@ const {ccclass, property} = cc._decorator;
 export default class GameConfig extends cc.Component {
 
    @property
-   scorePerTile: number = 20;
+   public scorePerTile: number = 20;
 
    @property
-   targetScore = 1000;
+   public targetScore = 1000;
 
    @property
-   gameSteps = 20;
+   public gameSteps = 20;
 
 
    @property
-   boardRows: number = 8;
+   public boardRows: number = 8;
 
    @property
-   boardCols: number = 8;
+   public boardCols: number = 8;
 
    @property([TileData])
    public allowedTiles: TileData[] = [];

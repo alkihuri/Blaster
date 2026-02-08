@@ -1,7 +1,8 @@
 import { ServiceContainer } from '../DI/ServiceContainer';
-import { StateBase } from './StateBase'; 
+import { StateBase } from './StateBase';
 import { InitState } from './InitState';
 import { PlayingState } from './PlayingState';
+import { WinState } from './WinState';
 
 const { ccclass } = cc._decorator;
 
@@ -13,11 +14,11 @@ export class StateMachine extends cc.Component {
 
     public serviceContainer!: ServiceContainer;
 
-    protected onLoad(): void { 
-        
+    protected onLoad(): void {
+
         this.registerState(StateType.Init, new InitState(this));
         this.registerState(StateType.Playing, new PlayingState(this));
-   
+        this.registerState(StateType.Win, new WinState(this));   
         this.changeState(StateType.Init);
     }
 
@@ -58,11 +59,15 @@ export class StateMachine extends cc.Component {
     public goPlaying(): void {
         this.changeState(StateType.Playing);
     }
+
+    public goWin(): void {
+        this.changeState(StateType.Win);
+    }
 }
 
 export enum StateType {
     Init,
     Playing,
-     Win,
-     Menu
+    Win,
+    Menu
 }

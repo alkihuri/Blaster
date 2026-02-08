@@ -30,7 +30,7 @@ export default class Bootstrapper extends cc.Component {
     @property(StateMachine)
     stateMachine: StateMachine = null;
 
-    start() {
+    onLoad() {
         const container = new ServiceContainer(this.gameConfig);
 
         container.register('GameConfig', this.gameConfig);
