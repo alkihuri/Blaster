@@ -49,7 +49,8 @@ export default class TileViewController extends cc.Component {
         if(!this.isClickable) { 
             return;
         }
-        this.isClickable = false;
+            console.log(`onTileClicked enter [${this.row},${this.col}] at ${Date.now()}`);
+            this.isClickable = false;
 
         if (this.onClickCallback && this.row >= 0 && this.col >= 0) {
             try { 
@@ -60,10 +61,12 @@ export default class TileViewController extends cc.Component {
             } catch (err) {
                 console.error("Tile click callback error:", err);
             } finally { 
-                this.isClickable = true;
+                    this.isClickable = true;
+                    console.log(`onTileClicked exit [${this.row},${this.col}] at ${Date.now()}`);
             }
         } else {
-            this.isClickable = true;
+                this.isClickable = true;
+                console.log(`onTileClicked exit (no callback) [${this.row},${this.col}] at ${Date.now()}`);
         }
     }
 
