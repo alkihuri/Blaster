@@ -3,6 +3,7 @@ import { StateBase } from './StateBase';
 import { InitState } from './InitState';
 import { PlayingState } from './PlayingState';
 import { WinState } from './WinState';
+import { LooseState } from './LooseState';
 
 const { ccclass } = cc._decorator;
 
@@ -18,7 +19,8 @@ export class StateMachine extends cc.Component {
 
         this.registerState(StateType.Init, new InitState(this));
         this.registerState(StateType.Playing, new PlayingState(this));
-        this.registerState(StateType.Win, new WinState(this));   
+        this.registerState(StateType.Win, new WinState(this));
+        this.registerState(StateType.Loose, new LooseState(this));  
         this.changeState(StateType.Init);
     }
 
@@ -63,11 +65,16 @@ export class StateMachine extends cc.Component {
     public goWin(): void {
         this.changeState(StateType.Win);
     }
+
+    public goLoose(): void {
+        this.changeState(StateType.Loose);
+    }
 }
 
 export enum StateType {
     Init,
     Playing,
     Win,
+    Loose,
     Menu
 }

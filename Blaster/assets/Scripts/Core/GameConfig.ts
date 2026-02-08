@@ -12,7 +12,7 @@ export default class GameConfig extends cc.Component {
    public targetScore = 1000;
 
    @property
-   public gameSteps = 20;
+   public gameMoves = 20;
 
 
    @property

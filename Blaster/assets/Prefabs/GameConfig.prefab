@@ -81,6 +81,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "scorePerTile": 20,
+    "targetScore": 1000,
+    "gameMoves": 20,
     "boardRows": 8,
     "boardCols": 8,
     "allowedTiles": [

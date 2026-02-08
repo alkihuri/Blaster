@@ -3,8 +3,10 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export class ContainerBase<T> extends cc.Component {
 
+    @property
     private Value: T;
 
+ 
     public onValueChanged: (newValue: T) => void = null;
 
     public setValue(newValue: T) {

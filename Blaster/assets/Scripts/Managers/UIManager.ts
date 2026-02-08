@@ -10,6 +10,7 @@ import ManagerBase from "./ManagerBase";
 import ScoreManager from "./ScoreManager";
 import { ServiceContainer } from "../DI/ServiceContainer";
 import { StateMachine } from "../States/StateMachine";
+import GameConfig from "../Core/GameConfig";
 
 const { ccclass, property } = cc._decorator;
 
@@ -17,25 +18,52 @@ const { ccclass, property } = cc._decorator;
 export default class UIManager extends ManagerBase {
 
     @property(cc.Label)
-    label: cc.Label = null;
+    scoreLabel: cc.Label = null;    
+    
+    @property(cc.Label)
+    movesLabel: cc.Label = null;
 
 
     @property(WinScreenController)
     winScreen: WinScreenController = null;
 
+    
+
+    private scoreManager: ScoreManager = null;
+    private gameConfig: GameConfig = null;
 
     init(container?: ServiceContainer): void {
+
+
         super.init(container);
+
+        this.gameConfig = this.container.resolve<GameConfig>('GameConfig');
+        if (!this.gameConfig) {
+            console.error("GameConfig is not assigned in UIManager");
+            return;
+        }
+
         try {
-            const scoreManager = this.container.resolve<ScoreManager>('ScoreManager');
-            if (scoreManager && scoreManager.score) {
-                scoreManager.score.onValueChanged = (newScore: number) => {
+            this.scoreManager = this.container.resolve<ScoreManager>('ScoreManager');
+            if (this.scoreManager && this.scoreManager.score) {
+                this.scoreManager.score.onValueChanged = (newScore: number) => {
                     this.updateScore(newScore);
                 }
                 console.log("UIManager started and subscribed to score changes");
             } else {
                 console.warn("ScoreManager or its score property not yet initialized");
             }
+
+
+            if (this.scoreManager && this.scoreManager.moves) {
+                this.scoreManager.moves.onValueChanged = (newMoves: number) => {
+                    this.updateMoves(newMoves);
+                }
+                console.log("UIManager started and subscribed to moves changes");
+            } else {
+                console.warn("ScoreManager or its moves property not yet initialized");
+            }
+
         } catch (err) {
             console.warn("Failed to resolve ScoreManager in UIManager.init:", err);
         }
@@ -52,10 +80,18 @@ export default class UIManager extends ManagerBase {
 
 
     public updateScore(score: number) {
-        if (this.label) {
-            this.label.string = `Score: ${score}`;
+        if (this.scoreLabel) {
+            this.scoreLabel.string = `ОЧКИ:\n ${score}/${this.gameConfig.targetScore}`;
         } else {
             console.error("Score label is not assigned in UIManager");
+        }
+    }
+
+    public updateMoves(moves: number) {
+        if (this.movesLabel) {
+            this.movesLabel.string = moves.toString();
+        } else {
+            console.error("Moves label is not assigned in UIManager");
         }
     }
 
@@ -76,4 +112,24 @@ export default class UIManager extends ManagerBase {
             console.error("WinScreenController is not assigned in UIManager");
         }
     }
+
+    public showLooseScreen() {
+        console.log("Showing loose screen");
+        if (this.winScreen) {
+            this.winScreen.showLooseScreen();
+        }
+        else {
+            console.error("WinScreenController is not assigned in UIManager");
+        }
+    }
+
+    public hideLooseScreen() {
+        console.log("Hiding loose screen");
+        if (this.winScreen) {
+            this.winScreen.hideLooseScreen();
+        }
+        else {
+            console.error("WinScreenController is not assigned in UIManager");
+        }
+    }       
 }

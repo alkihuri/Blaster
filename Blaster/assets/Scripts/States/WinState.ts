@@ -20,3 +20,6 @@ export class WinState extends StateBase {
         this.game.resolve<ScoreManager>('ScoreManager').reset();
     }
 }
+
+
+

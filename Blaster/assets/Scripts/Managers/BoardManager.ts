@@ -101,7 +101,8 @@ export class BoardManager extends ManagerBase {
                 await this.boardViewController.updateBoardFromState(oldState, newState); 
                 const scoreGained = this.boardService.calculateScore(newState);
                 if (this.scoremanager) {
-                    this.scoremanager.add(scoreGained);
+                    this.scoremanager.addPoints(scoreGained);
+                    this.scoremanager.reduceMoves(1);
                 }
                 console.log("Board update complete");
             } else {
