@@ -13,6 +13,8 @@ export class GameManager extends ManagerBase {
     private boardManager: BoardManager = null;
     private scoreManager: ScoreManager = null;
 
+
+    public isBooster : boolean = false; // HARDCODE FLAG
  
 
     @property(IntContainer)

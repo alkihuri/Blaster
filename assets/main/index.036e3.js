@@ -265,15 +265,18 @@ window.__require = function e(t, n, r) {
               _a.label = 1;
 
              case 1:
-              _a.trys.push([ 1, 5, 6, 7 ]);
+              _a.trys.push([ 1, 6, 7, 8 ]);
               oldState = this.boardState.clone();
-              newState = this.boardService.handleTileClick(row, col);
-              if (!newState) return [ 3, 3 ];
+              return [ 4, this.boardService.handleTileClick(row, col) ];
+
+             case 2:
+              newState = _a.sent();
+              if (!newState) return [ 3, 4 ];
               console.log("Board state updated, rendering changes...");
               this.boardState = newState;
               return [ 4, this.boardViewController.updateBoardFromState(oldState, newState) ];
 
-             case 2:
+             case 3:
               _a.sent();
               scoreGained = this.boardService.calculateScore(newState);
               if (this.scoremanager) {
@@ -281,26 +284,26 @@ window.__require = function e(t, n, r) {
                 this.scoremanager.reduceMoves(1);
               }
               console.log("Board update complete");
-              return [ 3, 4 ];
-
-             case 3:
-              console.log("No matching tiles for this position");
-              _a.label = 4;
+              return [ 3, 5 ];
 
              case 4:
-              return [ 3, 7 ];
+              console.log("No matching tiles for this position");
+              _a.label = 5;
 
              case 5:
-              err_2 = _a.sent();
-              console.error("Error in tile click handler:", err_2);
-              return [ 3, 7 ];
+              return [ 3, 8 ];
 
              case 6:
+              err_2 = _a.sent();
+              console.error("Error in tile click handler:", err_2);
+              return [ 3, 8 ];
+
+             case 7:
               this.isAnimating = false;
               console.log("Ready for next click");
               return [ 7 ];
 
-             case 7:
+             case 8:
               return [ 2 ];
             }
           });
@@ -332,6 +335,122 @@ window.__require = function e(t, n, r) {
       if ("object" === typeof Reflect && "function" === typeof Reflect.decorate) r = Reflect.decorate(decorators, target, key, desc); else for (var i = decorators.length - 1; i >= 0; i--) (d = decorators[i]) && (r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r);
       return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
+    var __awaiter = this && this.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    var __generator = this && this.__generator || function(thisArg, body) {
+      var _ = {
+        label: 0,
+        sent: function() {
+          if (1 & t[0]) throw t[1];
+          return t[1];
+        },
+        trys: [],
+        ops: []
+      }, f, y, t, g;
+      return g = {
+        next: verb(0),
+        throw: verb(1),
+        return: verb(2)
+      }, "function" === typeof Symbol && (g[Symbol.iterator] = function() {
+        return this;
+      }), g;
+      function verb(n) {
+        return function(v) {
+          return step([ n, v ]);
+        };
+      }
+      function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+          if (f = 1, y && (t = 2 & op[0] ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 
+          0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+          (y = 0, t) && (op = [ 2 & op[0], t.value ]);
+          switch (op[0]) {
+           case 0:
+           case 1:
+            t = op;
+            break;
+
+           case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+           case 5:
+            _.label++;
+            y = op[1];
+            op = [ 0 ];
+            continue;
+
+           case 7:
+            op = _.ops.pop();
+            _.trys.pop();
+            continue;
+
+           default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (6 === op[0] || 2 === op[0])) {
+              _ = 0;
+              continue;
+            }
+            if (3 === op[0] && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+            if (6 === op[0] && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+              _.ops.push(op);
+              break;
+            }
+            t[2] && _.ops.pop();
+            _.trys.pop();
+            continue;
+          }
+          op = body.call(thisArg, _);
+        } catch (e) {
+          op = [ 6, e ];
+          y = 0;
+        } finally {
+          f = t = 0;
+        }
+        if (5 & op[0]) throw op[1];
+        return {
+          value: op[0] ? op[1] : void 0,
+          done: true
+        };
+      }
+    };
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
@@ -350,28 +469,36 @@ window.__require = function e(t, n, r) {
         return this.boardState;
       };
       BoardService.prototype.handleTileClick = function(row, col) {
-        if (!this.boardState) {
-          console.error("Board state not initialized");
-          return null;
-        }
-        var tileType = this.boardState.getTileAt(row, col);
-        if (tileType === TileType_1.TileType.None) return null;
-        if (this.boosterService.isBooster(tileType)) return this.handleBoosterClick(row, col);
-        var tilesToRemove = this.findMatchingTiles(row, col, tileType);
-        if (0 === tilesToRemove.length) {
-          console.log("No matching tiles found");
-          return null;
-        }
-        var newState = this.boardState.clone();
-        newState.wasRemove = tilesToRemove;
-        for (var _i = 0, tilesToRemove_1 = tilesToRemove; _i < tilesToRemove_1.length; _i++) {
-          var tile = tilesToRemove_1[_i];
-          newState.setTileAt(tile.row, tile.col, TileType_1.TileType.None);
-        }
-        this.applyGravity(newState);
-        this.fillEmptySpaces(newState);
-        this.boardState = newState;
-        return newState;
+        return __awaiter(this, void 0, Promise, function() {
+          var tileType, tilesToRemove, newState, _i, tilesToRemove_1, tile;
+          return __generator(this, function(_a) {
+            if (!this.boardState) {
+              console.error("Board state not initialized");
+              return [ 2, null ];
+            }
+            tileType = this.boardState.getTileAt(row, col);
+            if (tileType === TileType_1.TileType.None) return [ 2, null ];
+            if (this.boosterService.isBooster(tileType)) {
+              console.log("Booster tile clicked");
+              return [ 2, this.handleBoosterClick(row, col) ];
+            }
+            tilesToRemove = this.findMatchingTiles(row, col, tileType);
+            if (0 === tilesToRemove.length) {
+              console.log("No matching tiles found");
+              return [ 2, null ];
+            }
+            newState = this.boardState.clone();
+            newState.wasRemove = tilesToRemove;
+            for (_i = 0, tilesToRemove_1 = tilesToRemove; _i < tilesToRemove_1.length; _i++) {
+              tile = tilesToRemove_1[_i];
+              newState.setTileAt(tile.row, tile.col, TileType_1.TileType.None);
+            }
+            this.applyGravity(newState);
+            this.fillEmptySpaces(newState);
+            this.boardState = newState;
+            return [ 2, newState ];
+          });
+        });
       };
       BoardService.prototype.findMatchingTiles = function(startRow, startCol, tileType) {
         var visited = [];
@@ -1359,6 +1486,7 @@ window.__require = function e(t, n, r) {
         this.scoreManager || console.error("ScoreManager is not available in GameManager.init");
         this.shuffleCount && this.boosterCount || console.error("GameManager initialization failed due to missing dependencies");
         this.shuffleCount.setValue(this.container.resolve("GameConfig").shuffleCount);
+        this.boosterCount.setValue(this.container.resolve("GameConfig").bosterCount);
       };
       GameManager.prototype.MinusShuffle = function() {
         if (this.shuffleCount.getValue() > 0) {
@@ -1367,7 +1495,7 @@ window.__require = function e(t, n, r) {
         } else console.warn("No shuffles left!");
       };
       GameManager.prototype.MinusBooster = function() {
-        this.boosterCount.value > 0 ? this.boosterCount.setValue(this.boosterCount.value - 1) : console.warn("No boosters left!");
+        this.boosterCount.getValue() > 0 ? this.boosterCount.setValue(this.boosterCount.getValue() - 1) : console.warn("No boosters left!");
       };
       GameManager.prototype.startGame = function() {
         this.boardManager.BuildUpBoard();
@@ -1691,7 +1819,7 @@ window.__require = function e(t, n, r) {
       PlayingState.prototype.onEnter = function() {
         console.log("[PlayingState] enter");
         this.game.resolve("GameManager").startGame();
-        this.game.resolve("BoardManager").BuildUpBoard();
+        this.game.resolve("ScoreManager").moves.setValue(this.game.config.gameMoves);
       };
       PlayingState.prototype.onExit = function() {
         this.game.resolve("GameManager").endGame();
@@ -1749,7 +1877,10 @@ window.__require = function e(t, n, r) {
       ScoreManager.prototype.onLoad = function() {
         if (!this.score) {
           this.score = this.node.getComponent(IntContainer_1.IntContainer);
-          this.score ? this.score.setValue(0) : console.error("ScoreManager requires an IntContainer component on the same node.");
+          if (this.score) {
+            this.score.setValue(0);
+            this.moves.setValue(this.container.config.gameMoves);
+          } else console.error("ScoreManager requires an IntContainer component on the same node.");
         }
         if (!this.moves) {
           this.moves = this.node.getComponent(IntContainer_1.IntContainer);

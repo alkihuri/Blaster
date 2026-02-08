@@ -119,6 +119,12 @@ export default class UIManager extends ManagerBase {
              this.container.resolve<GameManager>('GameManager').MinusShuffle();
         });
 
+        this.mainMenu.subscribeToBoosterButton(()=>
+        {
+            this.container.resolve<GameManager>('GameManager').isBooster = true; /// HARDCODE. 
+
+        });
+
         this.winScreen.subscribeToRestart(() => {
             this.container.resolve<StateMachine>("StateMachine").goPlaying();
         });
