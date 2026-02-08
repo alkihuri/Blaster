@@ -26,6 +26,7 @@ export class ScoreManager extends ManagerBase {
                 console.error("ScoreManager requires an IntContainer component on the same node.");
             } else {
                 this.score.setValue(0);
+                this.moves.setValue(this.container.config.gameMoves);
             }
         }
 

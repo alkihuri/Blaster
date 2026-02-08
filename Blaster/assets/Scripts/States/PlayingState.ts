@@ -18,8 +18,8 @@ export class PlayingState extends StateBase {
         console.log('[PlayingState] enter');
   
         this.game.resolve<GameManager>('GameManager').startGame();
-
-        this.game.resolve<BoardManager>('BoardManager').BuildUpBoard();
+        
+        this.game.resolve<ScoreManager>('ScoreManager').moves.setValue(this.game.config.gameMoves);
         
         
         

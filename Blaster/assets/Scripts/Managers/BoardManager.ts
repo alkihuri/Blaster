@@ -93,7 +93,7 @@ export class BoardManager extends ManagerBase {
 
         try {
             const oldState = this.boardState.clone();
-            const newState = this.boardService.handleTileClick(row, col);
+            const newState = await this.boardService.handleTileClick(row, col);
 
             if (newState) {
                 console.log("Board state updated, rendering changes...");

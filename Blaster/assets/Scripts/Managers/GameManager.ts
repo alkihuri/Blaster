@@ -40,6 +40,7 @@ export class GameManager extends ManagerBase {
            }
 
            this.shuffleCount.setValue(this.container.resolve<GameConfig>('GameConfig').shuffleCount);
+           this.boosterCount.setValue(this.container.resolve<GameConfig>('GameConfig').bosterCount);
        }
 
 

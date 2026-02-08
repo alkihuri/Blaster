@@ -687,7 +687,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 373.11,
+      "width": 322.51,
       "height": 164.98
     },
     "_anchorPoint": {
@@ -739,8 +739,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "ОЧКИ:\n221/500",
-    "_N$string": "ОЧКИ:\n221/500",
+    "_string": "ОЧКИ:\n0/1000",
+    "_N$string": "ОЧКИ:\n0/1000",
     "_fontSize": 87.40000000000006,
     "_lineHeight": 73.09999999999994,
     "_enableWrapText": true,

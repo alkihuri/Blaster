@@ -88,7 +88,7 @@ export default class UIManager extends ManagerBase {
             return;
         }
 
-
+        
 
         try {
             this.container.resolve<GameManager>('GameManager').shuffleCount.onValueChanged = (newShuffleCount: number) => {
@@ -111,6 +111,7 @@ export default class UIManager extends ManagerBase {
             console.warn("Failed to resolve GameManager or its properties in UIManager.init:", err);
         }
 
+ 
 
         this.mainMenu.subscribeToShuffleButton(() => {
              this.container.resolve<BoardManager>('BoardManager').BuildUpBoard();

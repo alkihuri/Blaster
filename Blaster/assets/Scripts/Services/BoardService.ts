@@ -20,7 +20,7 @@ export default class BoardService {
         return this.boardState;
     }
  
-    public handleTileClick(row: number, col: number): BoardState {
+    public async handleTileClick(row: number, col: number): Promise<BoardState> {
         if (!this.boardState) {
             console.error("Board state not initialized");
             return null;
@@ -32,6 +32,7 @@ export default class BoardService {
         }
  
         if (this.boosterService.isBooster(tileType)) {
+            console.log("Booster tile clicked");
             return this.handleBoosterClick(row, col);
         }
  
@@ -41,7 +42,7 @@ export default class BoardService {
             console.log("No matching tiles found");
             return null;
         }
- 
+
         const newState = this.boardState.clone();
         newState.wasRemove = tilesToRemove;
          
@@ -50,7 +51,6 @@ export default class BoardService {
         }
  
         this.applyGravity(newState);
- 
         this.fillEmptySpaces(newState);
 
         this.boardState = newState;
