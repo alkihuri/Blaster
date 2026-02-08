@@ -4,7 +4,7 @@ import { TileType } from "./TileType";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class BoardState { // хотел сделать как состояние и прокидывать конфиг но оставим как естЬ)))
+export default class BoardState {  
     public grid: TileType[][] = [];
     public rows: number;
     public cols: number;

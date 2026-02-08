@@ -38,25 +38,32 @@ export default class TileViewController extends cc.Component {
         //console.log("TileViewController updated with type: " + this.type);  
     }
     protected onLoad(): void { 
-        this.node.on(cc.Node.EventType.MOUSE_DOWN, this.onTileClicked, this);
+        this.node.on(cc.Node.EventType.TOUCH_START, this.onTileClicked.bind(this), this);
     }
 
     protected onDestroy(): void {
-        this.node.off(cc.Node.EventType.MOUSE_DOWN, this.onTileClicked, this);
+        this.node.off(cc.Node.EventType.TOUCH_START, this.onTileClicked.bind(this), this);
     }
 
-    private onTileClicked() {
-
+    private async onTileClicked() { 
         if(!this.isClickable) { 
             return;
         }
+        this.isClickable = false;
 
         if (this.onClickCallback && this.row >= 0 && this.col >= 0) {
-            // Handle both sync and async callbacks
-            const result = this.onClickCallback(this.row, this.col, this);
-            if(result instanceof Promise) {
-                result.catch(err => console.error("Tile click callback error:", err));
+            try { 
+                const result = this.onClickCallback(this.row, this.col, this);
+                if(result instanceof Promise) {
+                    await result;
+                }
+            } catch (err) {
+                console.error("Tile click callback error:", err);
+            } finally { 
+                this.isClickable = true;
             }
+        } else {
+            this.isClickable = true;
         }
     }
 

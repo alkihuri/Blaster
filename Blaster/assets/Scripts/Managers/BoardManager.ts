@@ -74,35 +74,45 @@ export class BoardManager extends ManagerBase {
     }
 
 
-    private async onTileClicked(row: number, col: number) {
-        await this.onTileClickedInternal(row, col);
+    private async onTileClicked(row: number, col: number) { 
+        try {
+            await this.onTileClickedInternal(row, col);
+        } catch (err) {
+            console.error("Tile click error:", err);
+        }
     }
 
-    private async onTileClickedInternal(row: number, col: number) {
+    private async onTileClickedInternal(row: number, col: number) { 
         if (this.isAnimating) {
             console.log("Animation in progress, click ignored");
             return;
         }
 
-
         console.log(`Tile clicked at [${row}, ${col}]`);
         this.isAnimating = true;
 
-        const oldState = this.boardState.clone();
+        try {
+            const oldState = this.boardState.clone();
+            const newState = this.boardService.handleTileClick(row, col);
 
-        const newState = this.boardService.handleTileClick(row, col);
-
-        if (newState) {
-            console.log("Board state updated, rendering changes...");
-            this.boardState = newState; 
-            await this.boardViewController.updateBoardFromState(oldState, newState);
-            const scoreGained = this.boardService.calculateScore(newState);
-            this.scoremanager.add(scoreGained); 
-        } else {
-            console.log("No matching tiles for this position");
+            if (newState) {
+                console.log("Board state updated, rendering changes...");
+                this.boardState = newState;   
+                await this.boardViewController.updateBoardFromState(oldState, newState); 
+                const scoreGained = this.boardService.calculateScore(newState);
+                if (this.scoremanager) {
+                    this.scoremanager.add(scoreGained);
+                }
+                console.log("Board update complete");
+            } else {
+                console.log("No matching tiles for this position");
+            }
+        } catch (err) {
+            console.error("Error in tile click handler:", err);
+        } finally { 
+            this.isAnimating = false;
+            console.log("Ready for next click");
         }
-
-        this.isAnimating = false;
     }
 
 
