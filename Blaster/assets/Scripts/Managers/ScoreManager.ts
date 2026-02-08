@@ -20,17 +20,17 @@ export class ScoreManager extends ManagerBase {
         this.score.setValue(0);  
     }
 
-    init(container?: ServiceContainer): void {
+    public init(container?: ServiceContainer): void {
         super.init(container);
     }
 
-    add(points: number) {
+    public add(points: number) {
         points = this.score.getValue() + points;
         this.score.setValue(points);
         console.log(`Score updated: ${this.score.getValue()}`);
     }
 
-    reset() {
+    public reset() {
         this.score.setValue(0);
     } 
 }

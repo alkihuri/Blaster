@@ -180,7 +180,7 @@ export default class BoardViewController extends cc.Component {
             }
         }
 
-        console.log("STRART!");
+        //console.log("STRART!");
         //await this.delay(200);
         if (animationPromises.length > 0) {
             await Promise.all(animationPromises);
@@ -189,7 +189,7 @@ export default class BoardViewController extends cc.Component {
         }
 
         //await this.delay(200);
-        console.log("FINISH1!");
+        //console.log("FINISH1!");
         for (let row = 0; row < newState.rows; row++) {
             if (!this.tileGrid[row]) {
                 this.tileGrid[row] = [];
@@ -231,7 +231,7 @@ export default class BoardViewController extends cc.Component {
             await Promise.all(animationPromises) && this.delay(50);
         }
 
-        console.log("FINISH2!");
+        //console.log("FINISH2!");
     }
 
 

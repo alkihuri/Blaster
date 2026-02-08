@@ -37,6 +37,7 @@ export default class BoardService {
         }
  
         const newState = this.boardState.clone();
+        newState.wasRemove = tilesToRemove;
          
         for (let tile of tilesToRemove) {
             newState.setTileAt(tile.row, tile.col, TileType.None);
@@ -115,18 +116,11 @@ export default class BoardService {
                 }
             }
         }
-    }
+    } 
 
-    public calculateScore(oldState: BoardState, newState: BoardState): number {
-        let score = 0;
-        for (let row = 0; row < oldState.rows; row++) {
-            for (let col = 0; col < oldState.cols; col++) {
-                if (oldState.getTileAt(row, col) !== TileType.None && newState.getTileAt(row, col) === TileType.None) {
-                    score += 10; // Example scoring: 10 points per removed tile
-                }
-            }
-        }
-        console.log(`Score calculated: ${score}`);
-        return score;
+    public calculateScore(state: BoardState): number {
+        const tilesRemoved = state.wasRemove.length; 
+        // TBD надо добавить верифиакцию что tilesRemoved корректно заполнен
+        return tilesRemoved;
     }
 }

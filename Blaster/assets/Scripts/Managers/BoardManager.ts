@@ -20,6 +20,22 @@ export class BoardManager extends ManagerBase {
     private boardState: BoardState = null;
     private isAnimating: boolean = false;
 
+    private scoremanager: ScoreManager = null;
+
+    protected onLoad(): void {
+         
+    }
+
+    public init(container: any): void {
+        super.init(container);
+        try {
+            this.scoremanager = this.container.resolve<ScoreManager>('ScoreManager');
+        } catch (err) {
+            console.warn('ScoreManager not available during BoardManager.init:', err);
+            this.scoremanager = null;
+        }
+    }
+
     start() {
         this.config = this.container.resolve<GameConfig>('GameConfig');
 
@@ -69,8 +85,6 @@ export class BoardManager extends ManagerBase {
         }
 
 
-        this.container.resolve<ScoreManager>('ScoreManager').add(1);
-
         console.log(`Tile clicked at [${row}, ${col}]`);
         this.isAnimating = true;
 
@@ -82,6 +96,8 @@ export class BoardManager extends ManagerBase {
             console.log("Board state updated, rendering changes...");
             this.boardState = newState; 
             await this.boardViewController.updateBoardFromState(oldState, newState);
+            const scoreGained = this.boardService.calculateScore(newState);
+            this.scoremanager.add(scoreGained); 
         } else {
             console.log("No matching tiles for this position");
         }
