@@ -20,6 +20,9 @@ export default class TileViewController extends cc.Component {
 
     public isClickable: boolean = true;
 
+    @property(cc.Label)
+    label: cc.Label = null;
+
 
     private row: number = -1;
     private col: number = -1;
@@ -33,6 +36,7 @@ export default class TileViewController extends cc.Component {
 
     public updateData(data : TileData) {
         
+        this.label.string = data.type.toString();
         this.type = data.type;
         this.node.getComponent(cc.Sprite).spriteFrame = data.sprite;    
         //console.log("TileViewController updated with type: " + this.type);  

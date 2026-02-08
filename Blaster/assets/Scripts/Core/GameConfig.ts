@@ -21,6 +21,12 @@ export default class GameConfig extends cc.Component {
    @property
    public boardCols: number = 8;
 
+   @property
+   public bosterCount: number = 3;
+      
+   @property
+   public shuffleCount: number = 5;
+
    @property([TileData])
    public allowedTiles: TileData[] = [];
 

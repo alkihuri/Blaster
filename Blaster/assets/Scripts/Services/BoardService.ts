@@ -61,12 +61,15 @@ export default class BoardService {
         const visited: boolean[][] = [];
         for (let i = 0; i < this.boardState.rows; i++) {
             visited[i] = [];
+            for (let j = 0; j < this.boardState.cols; j++) {
+                visited[i][j] = false;
+            }
         }
 
         const result = [];
         this.floodFill(startRow, startCol, tileType, visited, result);
  
-        if (result.length >= 3) {
+        if (result.length >= 2) {
             return result;
         }
         return [];

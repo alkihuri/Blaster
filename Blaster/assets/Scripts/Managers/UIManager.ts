@@ -11,6 +11,9 @@ import ScoreManager from "./ScoreManager";
 import { ServiceContainer } from "../DI/ServiceContainer";
 import { StateMachine } from "../States/StateMachine";
 import GameConfig from "../Core/GameConfig";
+import GameManager from "./GameManager";
+import MainMenuController from "../View/MainMenuController";
+import { BoardManager } from "./BoardManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -18,16 +21,28 @@ const { ccclass, property } = cc._decorator;
 export default class UIManager extends ManagerBase {
 
     @property(cc.Label)
-    scoreLabel: cc.Label = null;    
-    
+    scoreLabel: cc.Label = null;
+
     @property(cc.Label)
     movesLabel: cc.Label = null;
+
+
+    @property(cc.Label)
+    shuffleCountLabel: cc.Label = null;
+
+    @property(cc.Label)
+    boosterCountLabel: cc.Label = null;
 
 
     @property(WinScreenController)
     winScreen: WinScreenController = null;
 
-    
+
+    //// TBD MOVE EVERYTHIN HERE INTO MAINMENUCONTROLLER
+    @property(MainMenuController)
+    mainMenu: MainMenuController = null;
+
+
 
     private scoreManager: ScoreManager = null;
     private gameConfig: GameConfig = null;
@@ -73,8 +88,36 @@ export default class UIManager extends ManagerBase {
             return;
         }
 
+
+
+        try {
+            this.container.resolve<GameManager>('GameManager').shuffleCount.onValueChanged = (newShuffleCount: number) => {
+                if (this.shuffleCountLabel) {
+                    this.shuffleCountLabel.string = newShuffleCount.toString();
+                } else {
+                    console.error("Shuffle count label is not assigned in UIManager");
+                }
+            }
+
+            this.container.resolve<GameManager>('GameManager').boosterCount.onValueChanged = (newBoosterCount: number) => {
+                if (this.boosterCountLabel) {
+                    this.boosterCountLabel.string = newBoosterCount.toString();
+                } else {
+                    console.error("Booster count label is not assigned in UIManager");
+
+                }
+            }
+        } catch (err) {
+            console.warn("Failed to resolve GameManager or its properties in UIManager.init:", err);
+        }
+
+
+        this.mainMenu.subscribeToShuffleButton(() => {
+             this.container.resolve<BoardManager>('BoardManager').BuildUpBoard();
+        });
+
         this.winScreen.subscribeToRestart(() => {
-            this.container.resolve<StateMachine>("StateMachine").goPlaying(); 
+            this.container.resolve<StateMachine>("StateMachine").goPlaying();
         });
     }
 
@@ -92,6 +135,14 @@ export default class UIManager extends ManagerBase {
             this.movesLabel.string = moves.toString();
         } else {
             console.error("Moves label is not assigned in UIManager");
+        }
+    }
+
+    public updateShuffleCount(count: number) {
+        if (this.shuffleCountLabel) {
+            this.shuffleCountLabel.string = `${count}`;
+        } else {
+            console.error("Shuffle count label is not assigned in UIManager");
         }
     }
 
@@ -131,5 +182,5 @@ export default class UIManager extends ManagerBase {
         else {
             console.error("WinScreenController is not assigned in UIManager");
         }
-    }       
+    }
 }
