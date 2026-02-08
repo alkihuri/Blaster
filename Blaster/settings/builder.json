@@ -2,7 +2,9 @@
   "title": "Blaster",
   "packageName": "org.cocos2d.demo",
   "startScene": "15fe8a01-3a7f-4bc6-a2cd-3fd584050f4d",
-  "excludeScenes": [],
+  "excludeScenes": [
+    "32a696d8-12ff-44ee-8e83-4062ab0389e2"
+  ],
   "orientation": {
     "landscapeRight": true,
     "landscapeLeft": true,
