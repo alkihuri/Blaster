@@ -18,6 +18,9 @@ export default class TileViewController extends cc.Component {
     @property({type:TileType})
     type: TileType =  TileType.Red;
 
+    public isClickable: boolean = true;
+
+
     private row: number = -1;
     private col: number = -1;
     private onClickCallback: TileClickCallback = null;
@@ -43,6 +46,11 @@ export default class TileViewController extends cc.Component {
     }
 
     private onTileClicked() {
+
+        if(!this.isClickable) { 
+            return;
+        }
+
         if (this.onClickCallback && this.row >= 0 && this.col >= 0) {
             // Handle both sync and async callbacks
             const result = this.onClickCallback(this.row, this.col, this);

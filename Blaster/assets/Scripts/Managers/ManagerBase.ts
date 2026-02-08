@@ -8,7 +8,7 @@ export default class ManagerBase extends cc.Component {
 
     protected container: ServiceContainer = null;
 
-    init(container: ServiceContainer) {
+    public init(container: ServiceContainer) {
         this.container = container;
     }
 }

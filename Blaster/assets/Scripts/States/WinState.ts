@@ -1,3 +1,4 @@
+import ScoreManager from "../Managers/ScoreManager";
 import UIManager from "../Managers/UIManager";
 import { StateBase } from "./StateBase";
 
@@ -10,12 +11,12 @@ export class WinState extends StateBase {
 
     onEnter(): void {
         console.log('[WinState] enter');
-        this.game.resolve<UIManager>('UIManager').showWinScreen();
-        // Here you can add logic to display a win screen, show score, etc.
+        this.game.resolve<UIManager>('UIManager').showWinScreen(); 
     }
 
     onExit(): void {
-        console.log('[WinState] exit');
-        // Clean up win screen, reset score, etc. if needed.        
+        console.log('[WinState] exit');       
+        this.game.resolve<UIManager>('UIManager').hideWinScreen(); 
+        this.game.resolve<ScoreManager>('ScoreManager').reset();
     }
 }

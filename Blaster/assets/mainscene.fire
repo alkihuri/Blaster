@@ -938,7 +938,7 @@
     "_groupIndex": 0,
     "groupIndex": 0,
     "showInEditor": false,
-    "_id": "2fEmyz6pZNS5wC2R82hbZ1"
+    "_id": "27SvSttaBMiqouhr3BY4OD"
   },
   {
     "__type__": "cc.Label",
@@ -971,7 +971,7 @@
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,
     "_N$cacheMode": 0,
-    "_id": "2f0RdpjGxAILQk+IfzsIKo"
+    "_id": "44idGuN7VP6IHmHokjUA2m"
   },
   {
     "__type__": "cc.RichText",
@@ -1813,7 +1813,7 @@
       "__id__": 35
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 37
@@ -1967,7 +1967,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Replay",
+    "_name": "ReplayBtn",
     "_objFlags": 0,
     "_parent": {
       "__id__": 38
@@ -2378,6 +2378,9 @@
     "_enabled": true,
     "winScreenNode": {
       "__id__": 38
+    },
+    "restartButton": {
+      "__id__": 45
     },
     "_id": "42P/3fj6hCvYwwTT7KP+p0"
   },
@@ -2918,7 +2921,9 @@
     "label": {
       "__id__": 13
     },
-    "winScreen": null,
+    "winScreen": {
+      "__id__": 47
+    },
     "_id": "abdx21xc5DX4z4VJOaS+Pc"
   },
   {

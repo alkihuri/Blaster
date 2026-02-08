@@ -26,7 +26,7 @@ export class BoardManager extends ManagerBase {
          
     }
 
-    public init(container: any): void {
+    public init(container: ServiceContainer): void {
         super.init(container);
         try {
             this.scoremanager = this.container.resolve<ScoreManager>('ScoreManager');
@@ -103,6 +103,11 @@ export class BoardManager extends ManagerBase {
         }
 
         this.isAnimating = false;
+    }
+
+
+    public ClearBoard() {  
+        this.boardViewController.clearBoard();
     }
 
 }

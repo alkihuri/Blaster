@@ -133,6 +133,13 @@ export default class BoardViewController extends cc.Component {
 
 
     public GenrateBoard(config: GameConfig) {
+
+ 
+        
+        this.tilesPool.forEach(element => {
+            element.isClickable = true;
+        });
+
         const rows = config.boardRows;
         const cols = config.boardCols;
 
@@ -235,4 +242,12 @@ export default class BoardViewController extends cc.Component {
     }
 
 
+
+    public clearBoard() {
+        // turn clickability off tilegrid 
+
+        this.tilesPool.forEach(element => {
+            element.isClickable = false;
+        });
+    }
 }

@@ -45,8 +45,11 @@ export default class Bootstrapper extends cc.Component {
         this.gameManager.init(container);
         this.uiManager.init(container);
 
-        this.stateMachine.injectContainer(container);
-
+        this.stateMachine.injectContainer(container);  
+        
         this.stateMachine.goInit();
+    }
+
+    protected start(): void {
     }
 }

@@ -9,6 +9,7 @@ import WinScreenController from "../View/WinScreenController";
 import ManagerBase from "./ManagerBase";
 import ScoreManager from "./ScoreManager";
 import { ServiceContainer } from "../DI/ServiceContainer";
+import { StateMachine } from "../States/StateMachine";
 
 const { ccclass, property } = cc._decorator;
 
@@ -43,6 +44,10 @@ export default class UIManager extends ManagerBase {
             console.error("WinScreenController is not assigned in UIManager");
             return;
         }
+
+        this.winScreen.subscribeToRestart(() => {
+            this.container.resolve<StateMachine>("StateMachine").goPlaying(); 
+        });
     }
 
 
