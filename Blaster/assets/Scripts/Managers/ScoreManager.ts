@@ -17,7 +17,7 @@ export class ScoreManager extends ManagerBase {
             console.error("ScoreManager requires an IntContainer component on the same node.");
         }
 
-        this.score.Value = 0; // Initialize score to 0
+        this.score.setValue(0);  
     }
 
     init(container?: ServiceContainer): void {
@@ -25,13 +25,13 @@ export class ScoreManager extends ManagerBase {
     }
 
     add(points: number) {
-        points = this.score.Value + points;
+        points = this.score.getValue() + points;
         this.score.setValue(points);
-        console.log(`Score updated: ${this.score.Value}`);
+        console.log(`Score updated: ${this.score.getValue()}`);
     }
 
     reset() {
-        this.score.Value = 0;
+        this.score.setValue(0);
     } 
 }
 

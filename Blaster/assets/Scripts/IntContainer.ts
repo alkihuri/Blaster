@@ -7,6 +7,6 @@ const { ccclass, property } = cc._decorator;
 export class IntContainer extends ContainerBase<number> {
     constructor(initialValue: number = 0) {
         super();
-        this.Value = initialValue;
+        this.setValue(initialValue);
     }
 }
