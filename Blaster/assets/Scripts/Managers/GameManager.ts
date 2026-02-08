@@ -2,8 +2,9 @@ import { ServiceContainer } from '../DI/ServiceContainer';
 import { IntContainer } from '../IntContainer';
 import { BoardManager } from './BoardManager';
 import ManagerBase from './ManagerBase';
-import GameConfig from '../Core/GameConfig';
 import ScoreManager from './ScoreManager';
+import GameConfig from '../Core/GameConfig';    
+import UIManager from './UIManager';
 
  
 const {ccclass, property} = cc._decorator;
@@ -34,13 +35,32 @@ export class GameManager extends ManagerBase {
                console.error("ScoreManager is not available in GameManager.init");
            }
 
-           if(!this.shuffleCount || !this.boosterCount   {
+           if(!this.shuffleCount || !this.boosterCount  ) {
                console.error("GameManager initialization failed due to missing dependencies");
            }
 
            this.shuffleCount.setValue(this.container.resolve<GameConfig>('GameConfig').shuffleCount);
-           this.boosterCount.setValue(this.container.resolve<GameConfig>('GameConfig').bosterCount);
        }
+
+
+    public MinusShuffle() { 
+        if(this.shuffleCount.getValue() > 0) {
+            this.shuffleCount.setValue(this.shuffleCount.getValue() - 1);
+            if(this.shuffleCount.getValue() === 0) {
+                this.container.resolve<UIManager>('UIManager').mainMenu.disableShuffleButton();
+            }   
+        } else {
+            console.warn("No shuffles left!");
+        }
+    }
+
+     public MinusBooster() {
+        if(this.boosterCount.value > 0) {
+            this.boosterCount.setValue(this.boosterCount.value - 1);
+        } else {
+            console.warn("No boosters left!");
+        }
+    }   
 
     startGame() {
          this.boardManager.BuildUpBoard();

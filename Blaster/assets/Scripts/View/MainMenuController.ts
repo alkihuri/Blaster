@@ -36,8 +36,9 @@ export default class MainMenuController extends cc.Component {
     }
 
     public subscribeToShuffleButton(callback: () => void) {
-        if (this.shiffleButton) {
-            this.shiffleButton.node.on(cc.Node.EventType.TOUCH_START, callback, this);
+        if (this.shiffleButton) { 
+            // click event is used instead of touch start to avoid conflicts with tile clicks
+            this.shiffleButton.node.on('click', callback);
         }
     }
 
@@ -46,6 +47,18 @@ export default class MainMenuController extends cc.Component {
             this.boosterButton.node.on(cc.Node.EventType.TOUCH_START, callback, this);
         }
     }   
+
+    public disableShuffleButton() {
+        if (this.shiffleButton) {
+            this.shiffleButton.interactable = false;
+        }
+    }
+
+    public disableBoosterButton() {
+        if (this.boosterButton) {
+            this.boosterButton.interactable = false;
+        }
+    }
 
     // LIFE-CYCLE CALLBACKS:
 }

@@ -114,6 +114,8 @@ export default class UIManager extends ManagerBase {
 
         this.mainMenu.subscribeToShuffleButton(() => {
              this.container.resolve<BoardManager>('BoardManager').BuildUpBoard();
+             console.log("Shuffle button clicked, board rebuilt");
+             this.container.resolve<GameManager>('GameManager').MinusShuffle();
         });
 
         this.winScreen.subscribeToRestart(() => {
