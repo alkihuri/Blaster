@@ -121,8 +121,8 @@ export default class UIManager extends ManagerBase {
 
         this.mainMenu.subscribeToBoosterButton(()=>
         {
-            this.container.resolve<GameManager>('GameManager').isBooster = true; /// HARDCODE. 
-
+            this.container.resolve<GameManager>('GameManager').isBoosterMode = true;
+            this.container.resolve<GameManager>('GameManager').MinusBooster();
         });
 
         this.winScreen.subscribeToRestart(() => {
