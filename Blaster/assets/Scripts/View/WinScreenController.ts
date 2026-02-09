@@ -14,22 +14,31 @@ export default class WinScreenController extends cc.Component {
     @property(cc.Sprite)
     public background: cc.Sprite = null;
 
+
+    @property(cc.Label)
+    public text: cc.Label = null;
+
     protected onLoad(): void {
         if (this.winScreenNode) {
             this.winScreenNode.active = false;
         } else {
             console.error("WinScreenController requires a reference to the win screen node.");
-        } 
+        }
 
-        if(!this.background) {
+        if (!this.background) {
             console.error("WinScreenController requires a reference to the background sprite.");
         }
     }
 
     public showWinScreen() {
-        if(this.background) {
+
+        if (this.text) {
+            this.text.string = "Победа!\n\n\n";
+        }
+
+        if (this.background) {
             this.background.node.color = cc.Color.GREEN;
-        }   
+        }
         if (this.winScreenNode) {
             this.winScreenNode.active = true;
         }
@@ -41,7 +50,7 @@ export default class WinScreenController extends cc.Component {
         } else {
             console.error("WinScreenController requires a reference to the win screen node.");
         }
-    } 
+    }
 
 
     public subscribeToRestart(callback: () => void) {
@@ -57,12 +66,16 @@ export default class WinScreenController extends cc.Component {
             this.showWinScreen();
 
             this.background.node.color = cc.Color.RED;
+            if (this.text) {
+                this.text.string = "Поражение.\n\n\n"; 
+            }
+
         } else {
             console.error("WinScreenController requires a reference to the background sprite.");
         }
     }
 
-public hideLooseScreen() {
+    public hideLooseScreen() {
         if (this.background) {
             this.hideWinScreen();
 
@@ -70,6 +83,6 @@ public hideLooseScreen() {
         } else {
             console.error("WinScreenController requires a reference to the background sprite.");
         }
-    }   
+    }
 
 } 

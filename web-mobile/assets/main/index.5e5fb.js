@@ -888,7 +888,6 @@ window.__require = function e(t, n, r) {
         var _this = this;
         var targetPos = this.getTileWorldPosition(targetRow, targetCol);
         var start = Date.now();
-        console.log("animateTileFall start [" + tile.getRow() + "," + tile.getCol() + "] -> [" + targetRow + "," + targetCol + "] dur=" + this.animationDuration);
         return new Promise(function(resolve) {
           cc.Tween.stopAllByTarget(tile.node);
           cc.tween(tile.node).to(_this.animationDuration, {
@@ -898,7 +897,6 @@ window.__require = function e(t, n, r) {
             easing: "quadIn"
           }).call(function() {
             var end = Date.now();
-            console.log("animateTileFall end [" + tile.getRow() + "," + tile.getCol() + "] took=" + (end - start) + "ms");
             resolve();
           }).start();
         });
@@ -906,7 +904,6 @@ window.__require = function e(t, n, r) {
       BoardViewController.prototype.animateTileDisappear = function(tile) {
         var _this = this;
         var start = Date.now();
-        console.log("animateTileDisappear start [" + tile.getRow() + "," + tile.getCol() + "] dur=" + this.disappearDuration);
         return new Promise(function(resolve) {
           cc.tween(tile.node).to(_this.disappearDuration, {
             scale: 0,
@@ -916,7 +913,6 @@ window.__require = function e(t, n, r) {
             tile.node.scale = 1;
             tile.node.opacity = 255;
             var end = Date.now();
-            console.log("animateTileDisappear end [" + tile.getRow() + "," + tile.getCol() + "] took=" + (end - start) + "ms");
             resolve();
           }).start();
         });
@@ -924,7 +920,6 @@ window.__require = function e(t, n, r) {
       BoardViewController.prototype.animateTileAppear = function(tile) {
         var _this = this;
         var start = Date.now();
-        console.log("animateTileAppear start [" + tile.getRow() + "," + tile.getCol() + "] dur=" + this.appearDuration);
         return new Promise(function(resolve) {
           cc.Tween.stopAllByTarget(tile.node);
           tile.node.active = true;
@@ -935,7 +930,6 @@ window.__require = function e(t, n, r) {
             opacity: 255
           }).call(function() {
             var end = Date.now();
-            console.log("animateTileAppear end [" + tile.getRow() + "," + tile.getCol() + "] took=" + (end - start) + "ms");
             resolve();
           }).start();
         });
@@ -974,9 +968,8 @@ window.__require = function e(t, n, r) {
           return __generator(this, function(_a) {
             switch (_a.label) {
              case 0:
-              _a.trys.push([ 0, 9, , 10 ]);
+              _a.trys.push([ 0, 8, , 9 ]);
               animationPromises = [];
-              console.log("Phase 1: Removing tiles...");
               for (row = 0; row < oldState.rows; row++) for (col = 0; col < oldState.cols; col++) {
                 oldType = oldState.getTileAt(row, col);
                 newType = newState.getTileAt(row, col);
@@ -987,17 +980,14 @@ window.__require = function e(t, n, r) {
                 }
               }
               if (!(animationPromises.length > 0)) return [ 3, 2 ];
-              console.log("Waiting for " + animationPromises.length + " disappear animations...");
               return [ 4, Promise.all(animationPromises) ];
 
              case 1:
               _a.sent();
-              console.log("All disappear animations complete");
               _a.label = 2;
 
              case 2:
               animationPromises.length = 0;
-              console.log("Phase 2: Placing and animating tiles...");
               for (row = 0; row < newState.rows; row++) {
                 this.tileGrid[row] || (this.tileGrid[row] = []);
                 for (col = 0; col < newState.cols; col++) {
@@ -1036,28 +1026,21 @@ window.__require = function e(t, n, r) {
 
              case 5:
               if (!(animationPromises.length > 0)) return [ 3, 7 ];
-              console.log("Waiting for " + animationPromises.length + " move/appear animations...");
               return [ 4, Promise.all(animationPromises) ];
 
              case 6:
               _a.sent();
-              console.log("All move/appear animations complete");
               _a.label = 7;
 
              case 7:
-              return [ 4, this.delay(50) ];
+              return [ 3, 9 ];
 
              case 8:
-              _a.sent();
-              console.log("updateBoardFromState complete");
-              return [ 3, 10 ];
-
-             case 9:
               err_1 = _a.sent();
               console.error("Error in updateBoardFromState:", err_1);
-              return [ 3, 10 ];
+              return [ 3, 9 ];
 
-             case 10:
+             case 9:
               return [ 2 ];
             }
           });
@@ -1147,6 +1130,7 @@ window.__require = function e(t, n, r) {
     var BoosterService = function() {
       function BoosterService() {}
       BoosterService.prototype.isBooster = function(tileType) {
+        console.log("comparing : " + tileType);
         return tileType === TileType_1.TileType.Booster;
       };
       BoosterService.prototype.activateBooster = function(state, centerRow, centerCol, radius) {
@@ -2399,7 +2383,7 @@ window.__require = function e(t, n, r) {
 
              case 5:
               this.isClickable = true;
-              console.log("onTileClicked exit [" + this.row + "," + this.col + "] at " + Date.now());
+              console.log("onTileClicked exit [" + this.row + "," + this.col + "] " + this.type + " at " + Date.now());
               return [ 7 ];
 
              case 6:
@@ -2613,6 +2597,7 @@ window.__require = function e(t, n, r) {
         _this.winScreenNode = null;
         _this.restartButton = null;
         _this.background = null;
+        _this.text = null;
         return _this;
       }
       WinScreenController.prototype.onLoad = function() {
@@ -2620,6 +2605,7 @@ window.__require = function e(t, n, r) {
         this.background || console.error("WinScreenController requires a reference to the background sprite.");
       };
       WinScreenController.prototype.showWinScreen = function() {
+        this.text && (this.text.string = "\u041f\u043e\u0431\u0435\u0434\u0430!\n\n\n");
         this.background && (this.background.node.color = cc.Color.GREEN);
         this.winScreenNode && (this.winScreenNode.active = true);
       };
@@ -2633,6 +2619,7 @@ window.__require = function e(t, n, r) {
         if (this.background) {
           this.showWinScreen();
           this.background.node.color = cc.Color.RED;
+          this.text && (this.text.string = "\u041f\u043e\u0440\u0430\u0436\u0435\u043d\u0438\u0435.\n\n\n");
         } else console.error("WinScreenController requires a reference to the background sprite.");
       };
       WinScreenController.prototype.hideLooseScreen = function() {
@@ -2644,6 +2631,7 @@ window.__require = function e(t, n, r) {
       __decorate([ property(cc.Node) ], WinScreenController.prototype, "winScreenNode", void 0);
       __decorate([ property(cc.Button) ], WinScreenController.prototype, "restartButton", void 0);
       __decorate([ property(cc.Sprite) ], WinScreenController.prototype, "background", void 0);
+      __decorate([ property(cc.Label) ], WinScreenController.prototype, "text", void 0);
       WinScreenController = __decorate([ ccclass ], WinScreenController);
       return WinScreenController;
     }(cc.Component);

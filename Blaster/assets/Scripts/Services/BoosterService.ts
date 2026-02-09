@@ -12,7 +12,7 @@ export default class BoosterService {
     public isBooster(tileType: TileType): boolean {
 
         console.log("comparing : " + tileType)
-        return tileType.toString() == "7";
+        return tileType === TileType.Booster;
     }
 
    
