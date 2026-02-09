@@ -66,7 +66,7 @@ export default class TileViewController extends cc.Component {
                 console.error("Tile click callback error:", err);
             } finally { 
                     this.isClickable = true;
-                    console.log(`onTileClicked exit [${this.row},${this.col}] at ${Date.now()}`);
+                    console.log(`onTileClicked exit [${this.row},${this.col}] ${this.type} at ${Date.now()}`);
             }
         } else {
                 this.isClickable = true;

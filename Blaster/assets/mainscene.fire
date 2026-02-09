@@ -3374,11 +3374,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 102
+        "__id__": 106
       }
     ],
     "_prefab": {
-      "__id__": 103
+      "__id__": 107
     },
     "_opacity": 255,
     "_color": {
@@ -4342,7 +4342,7 @@
       }
     ],
     "_prefab": {
-      "__id__": 101
+      "__id__": 105
     },
     "_opacity": 255,
     "_color": {
@@ -4408,31 +4408,43 @@
     "shuffleCount": 99,
     "allowedTiles": [
       {
-        "type": 1,
-        "sprite": {
-          "__uuid__": "bb54e62b-db4b-42ac-a49a-581682c07a99"
-        }
+        "__id__": 101
       },
       {
-        "type": 2,
-        "sprite": {
-          "__uuid__": "e2f4a4df-2bce-41ca-8096-6840877a7384"
-        }
+        "__id__": 102
       },
       {
-        "type": 3,
-        "sprite": {
-          "__uuid__": "a261585e-f98a-4e7f-8ef0-bc64ec5a4ba4"
-        }
+        "__id__": 103
       },
       {
-        "type": 4,
-        "sprite": {
-          "__uuid__": "b04eb92b-0622-4baa-8180-1953c7770050"
-        }
+        "__id__": 104
       }
     ],
     "_id": "c63axeLABHooinL5J4W3hb"
+  },
+  {
+    "type": 1,
+    "sprite": {
+      "__uuid__": "bb54e62b-db4b-42ac-a49a-581682c07a99"
+    }
+  },
+  {
+    "type": 7,
+    "sprite": {
+      "__uuid__": "52b617d4-2545-4612-840e-f191f00e3c32"
+    }
+  },
+  {
+    "type": 2,
+    "sprite": {
+      "__uuid__": "e2f4a4df-2bce-41ca-8096-6840877a7384"
+    }
+  },
+  {
+    "type": 3,
+    "sprite": {
+      "__uuid__": "b04eb92b-0622-4baa-8180-1953c7770050"
+    }
   },
   {
     "__type__": "cc.PrefabInfo",

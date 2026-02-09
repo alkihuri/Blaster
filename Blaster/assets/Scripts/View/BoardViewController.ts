@@ -100,7 +100,7 @@ export default class BoardViewController extends cc.Component {
         const targetPos = this.getTileWorldPosition(targetRow, targetCol);
 
         const start = Date.now();
-        console.log(`animateTileFall start [${tile.getRow()},${tile.getCol()}] -> [${targetRow},${targetCol}] dur=${this.animationDuration}`);
+        //console.log(`animateTileFall start [${tile.getRow()},${tile.getCol()}] -> [${targetRow},${targetCol}] dur=${this.animationDuration}`);
         return new Promise(resolve => {
 
             cc.Tween.stopAllByTarget(tile.node);
@@ -112,7 +112,7 @@ export default class BoardViewController extends cc.Component {
                 }, { easing: 'quadIn' })
                 .call(() => {
                     const end = Date.now();
-                    console.log(`animateTileFall end [${tile.getRow()},${tile.getCol()}] took=${end - start}ms`);
+                    //console.log(`animateTileFall end [${tile.getRow()},${tile.getCol()}] took=${end - start}ms`);
                     resolve();
                 })
                 .start();
@@ -122,7 +122,7 @@ export default class BoardViewController extends cc.Component {
 
     private animateTileDisappear(tile: TileViewController): Promise<void> {
         const start = Date.now();
-        console.log(`animateTileDisappear start [${tile.getRow()},${tile.getCol()}] dur=${this.disappearDuration}`);
+        //console.log(`animateTileDisappear start [${tile.getRow()},${tile.getCol()}] dur=${this.disappearDuration}`);
         return new Promise((resolve) => {
             cc.tween(tile.node)
                 .to(this.disappearDuration, { scale: 0, opacity: 0 })
@@ -131,7 +131,7 @@ export default class BoardViewController extends cc.Component {
                     tile.node.scale = 1;
                     tile.node.opacity = 255;
                     const end = Date.now();
-                    console.log(`animateTileDisappear end [${tile.getRow()},${tile.getCol()}] took=${end - start}ms`);
+                    //console.log(`animateTileDisappear end [${tile.getRow()},${tile.getCol()}] took=${end - start}ms`);
                     resolve();
                 })
                 .start();
@@ -140,7 +140,7 @@ export default class BoardViewController extends cc.Component {
 
     private animateTileAppear(tile: TileViewController): Promise<void> {
         const start = Date.now();
-        console.log(`animateTileAppear start [${tile.getRow()},${tile.getCol()}] dur=${this.appearDuration}`);
+        //console.log(`animateTileAppear start [${tile.getRow()},${tile.getCol()}] dur=${this.appearDuration}`);
         return new Promise(resolve => {
 
             cc.Tween.stopAllByTarget(tile.node);
@@ -153,7 +153,7 @@ export default class BoardViewController extends cc.Component {
                 .to(this.appearDuration, { scale: 1, opacity: 255 })
                 .call(() => {
                     const end = Date.now();
-                    console.log(`animateTileAppear end [${tile.getRow()},${tile.getCol()}] took=${end - start}ms`);
+                    //console.log(`animateTileAppear end [${tile.getRow()},${tile.getCol()}] took=${end - start}ms`);
                     resolve();
                 })
                 .start();
@@ -202,7 +202,7 @@ export default class BoardViewController extends cc.Component {
         try {
             const animationPromises: Promise<void>[] = [];
              
-            console.log("Phase 1: Removing tiles...");
+            //console.log("Phase 1: Removing tiles...");
             for (let row = 0; row < oldState.rows; row++) {
                 for (let col = 0; col < oldState.cols; col++) {
                     const oldType = oldState.getTileAt(row, col);
@@ -218,13 +218,13 @@ export default class BoardViewController extends cc.Component {
                 }
             } 
             if (animationPromises.length > 0) {
-                console.log(`Waiting for ${animationPromises.length} disappear animations...`);
+                //console.log(`Waiting for ${animationPromises.length} disappear animations...`);
                 await Promise.all(animationPromises);
-                console.log("All disappear animations complete");
+                //console.log("All disappear animations complete");
             }
             animationPromises.length = 0;
              
-            console.log("Phase 2: Placing and animating tiles...");
+            //console.log("Phase 2: Placing and animating tiles...");
             for (let row = 0; row < newState.rows; row++) {
                 if (!this.tileGrid[row]) {
                     this.tileGrid[row] = [];
@@ -268,14 +268,14 @@ export default class BoardViewController extends cc.Component {
             }
              
             if (animationPromises.length > 0) {
-                console.log(`Waiting for ${animationPromises.length} move/appear animations...`);
+                //console.log(`Waiting for ${animationPromises.length} move/appear animations...`);
                 await Promise.all(animationPromises);
-                console.log("All move/appear animations complete");
+                //console.log("All move/appear animations complete");
             }
             
             // Финальная задержка перед завершением
-            await this.delay(50);
-            console.log("updateBoardFromState complete");
+           // await this.delay(50);
+           // console.log("updateBoardFromState complete");
         } catch (err) {
             console.error("Error in updateBoardFromState:", err);
         } 
