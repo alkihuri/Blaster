@@ -1474,6 +1474,7 @@ window.__require = function e(t, n, r) {
         var _this = null !== _super && _super.apply(this, arguments) || this;
         _this.boardManager = null;
         _this.scoreManager = null;
+        _this.isBooster = false;
         _this.shuffleCount = null;
         _this.boosterCount = null;
         return _this;
@@ -2525,6 +2526,9 @@ window.__require = function e(t, n, r) {
           _this.container.resolve("BoardManager").BuildUpBoard();
           console.log("Shuffle button clicked, board rebuilt");
           _this.container.resolve("GameManager").MinusShuffle();
+        });
+        this.mainMenu.subscribeToBoosterButton(function() {
+          _this.container.resolve("GameManager").isBooster = true;
         });
         this.winScreen.subscribeToRestart(function() {
           _this.container.resolve("StateMachine").goPlaying();
