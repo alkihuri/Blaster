@@ -121,9 +121,9 @@ export default class BoardViewController extends cc.Component {
 
 
     private async animateTileDisappear(tile: TileViewController): Promise<void> {
-        
+
         await tile.BlinkColor(cc.Color.RED);
-        
+
         return new Promise((resolve) => {
             cc.Tween.stopAllByTarget(tile.node);
             const originalX = tile.node.x;
@@ -165,8 +165,8 @@ export default class BoardViewController extends cc.Component {
 
     public GenrateBoard(config: GameConfig) {
 
- 
-        
+
+
         this.tilesPool.forEach(element => {
             element.isClickable = true;
         });
@@ -203,25 +203,31 @@ export default class BoardViewController extends cc.Component {
     public async updateBoardFromState(oldState: BoardState, newState: BoardState) {
         try {
             const animationPromises: Promise<void>[] = [];
-             
+
             //console.log("Phase 1: Removing tiles...");
             for (let row = 0; row < oldState.rows; row++) {
                 for (let col = 0; col < oldState.cols; col++) {
                     const oldType = oldState.getTileAt(row, col);
-                    const newType = newState.getTileAt(row, col);
+                    const newType = newState.getTileAt(row, col); 
 
                     if (oldType != newType) {
                         if (this.tileGrid[row] && this.tileGrid[row][col]) {
                             const tile = this.tileGrid[row][col];
-                            animationPromises.push(
-                                 tile.BlinkColor(cc.Color.RED)
-                            ); 
-                            // animationPromises.push(this.animateTileDisappear(tile));
+
+                            if (newState.wasRemove.some(t => t.row === row && t.col === col)) {
+                               
+
+                            animationPromises.push(this.animateTileDisappear(tile));
+                            }
+
+                             animationPromises.push(
+                                    tile.BlinkColor(cc.Color.RED)
+                                ); // debug 
                             //this.tileGrid[row][col] = null;
                         }
                     }
                 }
-            } 
+            }
             //console.log(`Waiting for ${animationPromises.length} blink animations...`);
             if (animationPromises.length > 0) {
                 //console.log(`Waiting for ${animationPromises.length} disappear animations...`);
@@ -229,7 +235,7 @@ export default class BoardViewController extends cc.Component {
                 //console.log("All disappear animations complete");
             }
             animationPromises.length = 0;
-             
+
             //console.log("Phase 2: Placing and animating tiles...");
             for (let row = 0; row < newState.rows; row++) {
                 if (!this.tileGrid[row]) {
@@ -255,7 +261,7 @@ export default class BoardViewController extends cc.Component {
                             tile.node.active = true;
 
                             const targetPos = this.getTileWorldPosition(row, col);
-                           // tile.node.setPosition(targetPos);
+                            // tile.node.setPosition(targetPos);
                             animationPromises.push(this.animateTileFall(tile, row, col));
                             this.tileGrid[row][col] = tile;
 
@@ -267,26 +273,26 @@ export default class BoardViewController extends cc.Component {
                         this.tileGrid[row][col] = null;
                     }
                 }
-            } 
+            }
 
             console.log(`Waiting for ${animationPromises.length} fall/appear animations...`);
             if (animationPromises.length > 0) {
                 await Promise.all(animationPromises);
                 await this.delay(50);
             }
-             
+
             if (animationPromises.length > 0) {
                 //console.log(`Waiting for ${animationPromises.length} move/appear animations...`);
                 await Promise.all(animationPromises);
                 //console.log("All move/appear animations complete");
             }
-            
+
             // Финальная задержка перед завершением
-           // await this.delay(50);
-           // console.log("updateBoardFromState complete");
+            // await this.delay(50);
+            // console.log("updateBoardFromState complete");
         } catch (err) {
             console.error("Error in updateBoardFromState:", err);
-        } 
+        }
     }
 
 

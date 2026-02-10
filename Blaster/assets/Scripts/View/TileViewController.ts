@@ -91,11 +91,7 @@ export default class TileViewController extends cc.Component {
         }
 
          // shake scale animation
-         
-         cc.tween(this.node)
-         .to(0.1, { scale: 1.1 })
-         .to(0.1, { scale: 1 })
-         .start();
+        
 
         // delay to allow color change to be visible before any subsequent actions
         return new Promise(resolve => setTimeout(resolve, 1000)).then(() => {     

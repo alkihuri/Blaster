@@ -29,8 +29,8 @@ export default class BoardService {
         const tileType = this.boardState.getTileAt(row, col);
         if (tileType === TileType.None) {
             return null;
-        }
- 
+        } 
+        
         if (this.boosterService.isBooster(tileType)) {
             console.log("Booster tile clicked");
             return this.handleBoosterClick(row, col);

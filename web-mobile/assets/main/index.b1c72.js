@@ -978,20 +978,28 @@ window.__require = function e(t, n, r) {
       };
       BoardViewController.prototype.updateBoardFromState = function(oldState, newState) {
         return __awaiter(this, void 0, void 0, function() {
-          var animationPromises, row, col, oldType, newType, tile, row, col, tileType, tileData, tile, isNewTile, targetPos, err_1;
+          var animationPromises, _loop_1, this_1, row, row, col, tileType, tileData, tile, isNewTile, targetPos, err_1;
           return __generator(this, function(_a) {
             switch (_a.label) {
              case 0:
               _a.trys.push([ 0, 8, , 9 ]);
               animationPromises = [];
-              for (row = 0; row < oldState.rows; row++) for (col = 0; col < oldState.cols; col++) {
-                oldType = oldState.getTileAt(row, col);
-                newType = newState.getTileAt(row, col);
-                if (oldType != newType && this.tileGrid[row] && this.tileGrid[row][col]) {
-                  tile = this.tileGrid[row][col];
-                  animationPromises.push(tile.BlinkColor(cc.Color.RED));
-                }
-              }
+              _loop_1 = function(row) {
+                var _loop_2 = function(col) {
+                  var oldType = oldState.getTileAt(row, col);
+                  var newType = newState.getTileAt(row, col);
+                  if (oldType != newType && this_1.tileGrid[row] && this_1.tileGrid[row][col]) {
+                    var tile = this_1.tileGrid[row][col];
+                    newState.wasRemove.some(function(t) {
+                      return t.row === row && t.col === col;
+                    }) && animationPromises.push(this_1.animateTileDisappear(tile));
+                    animationPromises.push(tile.BlinkColor(cc.Color.RED));
+                  }
+                };
+                for (var col = 0; col < oldState.cols; col++) _loop_2(col);
+              };
+              this_1 = this;
+              for (row = 0; row < oldState.rows; row++) _loop_1(row);
               if (!(animationPromises.length > 0)) return [ 3, 2 ];
               return [ 4, Promise.all(animationPromises) ];
 
@@ -2433,11 +2441,6 @@ window.__require = function e(t, n, r) {
           var _this = this;
           return __generator(this, function(_a) {
             this.label.node.color = color;
-            cc.tween(this.node).to(.1, {
-              scale: 1.1
-            }).to(.1, {
-              scale: 1
-            }).start();
             return [ 2, new Promise(function(resolve) {
               return setTimeout(resolve, 1e3);
             }).then(function() {
