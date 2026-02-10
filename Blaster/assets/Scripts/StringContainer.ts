@@ -7,6 +7,6 @@ const { ccclass, property } = cc._decorator;
 export class StringContainer extends ContainerBase<string> {
     constructor(initialValue: string = "") {
         super();
-        this.Value = initialValue;
+        this.setValue(initialValue);
     }
 }

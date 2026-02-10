@@ -16,7 +16,7 @@ export default class BoardViewController extends cc.Component {
 
 
     tilesPool: TileViewController[] = [];
-    tileGrid: TileViewController[][] = []; // 2D array to store tile references
+    tileGrid: (TileViewController | null)[][] = []; // 2D array to store tile references
 
     private tileSize: number;
 
@@ -120,18 +120,20 @@ export default class BoardViewController extends cc.Component {
     }
 
 
-    private animateTileDisappear(tile: TileViewController): Promise<void> {
-        const start = Date.now();
-        //console.log(`animateTileDisappear start [${tile.getRow()},${tile.getCol()}] dur=${this.disappearDuration}`);
+    private async animateTileDisappear(tile: TileViewController): Promise<void> {
+        
+        await tile.BlinkColor(cc.Color.RED);
+        
         return new Promise((resolve) => {
+            cc.Tween.stopAllByTarget(tile.node);
+            const originalX = tile.node.x;
             cc.tween(tile.node)
-                .to(this.disappearDuration, { scale: 0, opacity: 0 })
+                .by(0.05, { x: 10 })
+                .by(0.05, { x: -20 })
+                .by(0.05, { x: 20 })
+                .by(0.05, { x: -10 })
+                .to(0.05, { x: originalX })
                 .call(() => {
-                    tile.node.active = false;
-                    tile.node.scale = 1;
-                    tile.node.opacity = 255;
-                    const end = Date.now();
-                    //console.log(`animateTileDisappear end [${tile.getRow()},${tile.getCol()}] took=${end - start}ms`);
                     resolve();
                 })
                 .start();
@@ -208,15 +210,19 @@ export default class BoardViewController extends cc.Component {
                     const oldType = oldState.getTileAt(row, col);
                     const newType = newState.getTileAt(row, col);
 
-                    if (oldType && !newType) {
+                    if (oldType != newType) {
                         if (this.tileGrid[row] && this.tileGrid[row][col]) {
                             const tile = this.tileGrid[row][col];
-                            animationPromises.push(this.animateTileDisappear(tile));
-                            this.tileGrid[row][col] = null;
+                            animationPromises.push(
+                                 tile.BlinkColor(cc.Color.RED)
+                            ); 
+                            // animationPromises.push(this.animateTileDisappear(tile));
+                            //this.tileGrid[row][col] = null;
                         }
                     }
                 }
             } 
+            //console.log(`Waiting for ${animationPromises.length} blink animations...`);
             if (animationPromises.length > 0) {
                 //console.log(`Waiting for ${animationPromises.length} disappear animations...`);
                 await Promise.all(animationPromises);
@@ -249,7 +255,7 @@ export default class BoardViewController extends cc.Component {
                             tile.node.active = true;
 
                             const targetPos = this.getTileWorldPosition(row, col);
-                            tile.node.setPosition(targetPos);
+                           // tile.node.setPosition(targetPos);
                             animationPromises.push(this.animateTileFall(tile, row, col));
                             this.tileGrid[row][col] = tile;
 
@@ -262,6 +268,8 @@ export default class BoardViewController extends cc.Component {
                     }
                 }
             } 
+
+            console.log(`Waiting for ${animationPromises.length} fall/appear animations...`);
             if (animationPromises.length > 0) {
                 await Promise.all(animationPromises);
                 await this.delay(50);

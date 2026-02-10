@@ -8,15 +8,15 @@
 import TileData from "../Core/TileData";
 import { TileType } from "../Core/TileType";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 export type TileClickCallback = (row: number, col: number, tile: TileViewController) => Promise<void> | void;
 
 @ccclass
 export default class TileViewController extends cc.Component {
 
-    @property({type:TileType})
-    type: TileType =  TileType.Red;
+    @property({ type: TileType })
+    type: TileType = TileType.Red;
 
     public isClickable: boolean = true;
 
@@ -34,43 +34,46 @@ export default class TileViewController extends cc.Component {
         this.onClickCallback = callback;
     }
 
-    public updateData(data : TileData) {
-        
+    public updateData(data: TileData) {
+
         this.label.string = data.type.toString();
         this.type = data.type;
-        this.node.getComponent(cc.Sprite).spriteFrame = data.sprite;    
+        this.node.getComponent(cc.Sprite).spriteFrame = data.sprite;
         //console.log("TileViewController updated with type: " + this.type);  
     }
-    protected onLoad(): void { 
+    protected onLoad(): void {
         this.node.on(cc.Node.EventType.TOUCH_START, this.onTileClicked.bind(this), this);
+        this.label.node.color = cc.Color.WHITE; 
     }
 
     protected onDestroy(): void {
         this.node.off(cc.Node.EventType.TOUCH_START, this.onTileClicked.bind(this), this);
     }
 
-    private async onTileClicked() { 
-        if(!this.isClickable) { 
+    private async onTileClicked() {
+        if (!this.isClickable) {
             return;
         }
-            console.log(`onTileClicked enter [${this.row},${this.col}] at ${Date.now()}`);
-            this.isClickable = false;
-
+        console.log(`onTileClicked enter [${this.row},${this.col}] at ${Date.now()}`);
+        this.isClickable = false;
+        this.label.node.color = cc.Color.RED;
+        await new Promise(resolve => setTimeout(resolve, 100)); // Short delay to show click feedback
+        this.label.node.color = cc.Color.WHITE;   
         if (this.onClickCallback && this.row >= 0 && this.col >= 0) {
-            try { 
+            try {
                 const result = this.onClickCallback(this.row, this.col, this);
-                if(result instanceof Promise) {
+                if (result instanceof Promise) {
                     await result;
                 }
             } catch (err) {
                 console.error("Tile click callback error:", err);
-            } finally { 
-                    this.isClickable = true;
-                    console.log(`onTileClicked exit [${this.row},${this.col}] ${this.type} at ${Date.now()}`);
+            } finally {
+                this.isClickable = true;
+                console.log(`onTileClicked exit [${this.row},${this.col}] ${this.type} at ${Date.now()}`);
             }
         } else {
-                this.isClickable = true;
-                console.log(`onTileClicked exit (no callback) [${this.row},${this.col}] at ${Date.now()}`);
+            this.isClickable = true;
+            console.log(`onTileClicked exit (no callback) [${this.row},${this.col}] at ${Date.now()}`);
         }
     }
 
@@ -81,5 +84,26 @@ export default class TileViewController extends cc.Component {
     public getCol(): number {
         return this.col;
     }
- 
+
+    public async  BlinkColor(color: cc.Color) : Promise<void> {
+        {
+            this.label.node.color = color;
+        }
+
+         // shake scale animation
+         
+         cc.tween(this.node)
+         .to(0.1, { scale: 1.1 })
+         .to(0.1, { scale: 1 })
+         .start();
+
+        // delay to allow color change to be visible before any subsequent actions
+        return new Promise(resolve => setTimeout(resolve, 1000)).then(() => {     
+
+            this.node.scale = 1;    
+
+        this.label.node.color = cc.Color.WHITE; 
+        }); 
+    }
+
 }
