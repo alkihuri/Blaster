@@ -902,19 +902,33 @@ window.__require = function e(t, n, r) {
         });
       };
       BoardViewController.prototype.animateTileDisappear = function(tile) {
-        var _this = this;
-        var start = Date.now();
-        return new Promise(function(resolve) {
-          cc.tween(tile.node).to(_this.disappearDuration, {
-            scale: 0,
-            opacity: 0
-          }).call(function() {
-            tile.node.active = false;
-            tile.node.scale = 1;
-            tile.node.opacity = 255;
-            var end = Date.now();
-            resolve();
-          }).start();
+        return __awaiter(this, void 0, Promise, function() {
+          return __generator(this, function(_a) {
+            switch (_a.label) {
+             case 0:
+              return [ 4, tile.BlinkColor(cc.Color.RED) ];
+
+             case 1:
+              _a.sent();
+              return [ 2, new Promise(function(resolve) {
+                cc.Tween.stopAllByTarget(tile.node);
+                var originalX = tile.node.x;
+                cc.tween(tile.node).by(.05, {
+                  x: 10
+                }).by(.05, {
+                  x: -20
+                }).by(.05, {
+                  x: 20
+                }).by(.05, {
+                  x: -10
+                }).to(.05, {
+                  x: originalX
+                }).call(function() {
+                  resolve();
+                }).start();
+              }) ];
+            }
+          });
         });
       };
       BoardViewController.prototype.animateTileAppear = function(tile) {
@@ -973,10 +987,9 @@ window.__require = function e(t, n, r) {
               for (row = 0; row < oldState.rows; row++) for (col = 0; col < oldState.cols; col++) {
                 oldType = oldState.getTileAt(row, col);
                 newType = newState.getTileAt(row, col);
-                if (oldType && !newType && this.tileGrid[row] && this.tileGrid[row][col]) {
+                if (oldType != newType && this.tileGrid[row] && this.tileGrid[row][col]) {
                   tile = this.tileGrid[row][col];
-                  animationPromises.push(this.animateTileDisappear(tile));
-                  this.tileGrid[row][col] = null;
+                  animationPromises.push(tile.BlinkColor(cc.Color.RED));
                 }
               }
               if (!(animationPromises.length > 0)) return [ 3, 2 ];
@@ -1005,7 +1018,6 @@ window.__require = function e(t, n, r) {
                       tile.setPosition(row, col, this.onTileClickCallback);
                       tile.node.active = true;
                       targetPos = this.getTileWorldPosition(row, col);
-                      tile.node.setPosition(targetPos);
                       animationPromises.push(this.animateTileFall(tile, row, col));
                       this.tileGrid[row][col] = tile;
                       isNewTile && animationPromises.push(this.animateTileAppear(tile));
@@ -1013,6 +1025,7 @@ window.__require = function e(t, n, r) {
                   } else this.tileGrid[row][col] = null;
                 }
               }
+              console.log("Waiting for " + animationPromises.length + " fall/appear animations...");
               if (!(animationPromises.length > 0)) return [ 3, 5 ];
               return [ 4, Promise.all(animationPromises) ];
 
@@ -2112,7 +2125,7 @@ window.__require = function e(t, n, r) {
       function StringContainer(initialValue) {
         void 0 === initialValue && (initialValue = "");
         var _this = _super.call(this) || this;
-        _this.Value = initialValue;
+        _this.setValue(initialValue);
         return _this;
       }
       StringContainer = __decorate([ ccclass ], StringContainer);
@@ -2347,6 +2360,7 @@ window.__require = function e(t, n, r) {
       };
       TileViewController.prototype.onLoad = function() {
         this.node.on(cc.Node.EventType.TOUCH_START, this.onTileClicked.bind(this), this);
+        this.label.node.color = cc.Color.WHITE;
       };
       TileViewController.prototype.onDestroy = function() {
         this.node.off(cc.Node.EventType.TOUCH_START, this.onTileClicked.bind(this), this);
@@ -2360,41 +2374,49 @@ window.__require = function e(t, n, r) {
               if (!this.isClickable) return [ 2 ];
               console.log("onTileClicked enter [" + this.row + "," + this.col + "] at " + Date.now());
               this.isClickable = false;
-              if (!(this.onClickCallback && this.row >= 0 && this.col >= 0)) return [ 3, 7 ];
-              _a.label = 1;
+              this.label.node.color = cc.Color.RED;
+              return [ 4, new Promise(function(resolve) {
+                return setTimeout(resolve, 100);
+              }) ];
 
              case 1:
-              _a.trys.push([ 1, 4, 5, 6 ]);
-              result = this.onClickCallback(this.row, this.col, this);
-              if (!(result instanceof Promise)) return [ 3, 3 ];
-              return [ 4, result ];
+              _a.sent();
+              this.label.node.color = cc.Color.WHITE;
+              if (!(this.onClickCallback && this.row >= 0 && this.col >= 0)) return [ 3, 8 ];
+              _a.label = 2;
 
              case 2:
-              _a.sent();
-              _a.label = 3;
+              _a.trys.push([ 2, 5, 6, 7 ]);
+              result = this.onClickCallback(this.row, this.col, this);
+              if (!(result instanceof Promise)) return [ 3, 4 ];
+              return [ 4, result ];
 
              case 3:
-              return [ 3, 6 ];
+              _a.sent();
+              _a.label = 4;
 
              case 4:
-              err_1 = _a.sent();
-              console.error("Tile click callback error:", err_1);
-              return [ 3, 6 ];
+              return [ 3, 7 ];
 
              case 5:
+              err_1 = _a.sent();
+              console.error("Tile click callback error:", err_1);
+              return [ 3, 7 ];
+
+             case 6:
               this.isClickable = true;
               console.log("onTileClicked exit [" + this.row + "," + this.col + "] " + this.type + " at " + Date.now());
               return [ 7 ];
 
-             case 6:
-              return [ 3, 8 ];
-
              case 7:
-              this.isClickable = true;
-              console.log("onTileClicked exit (no callback) [" + this.row + "," + this.col + "] at " + Date.now());
-              _a.label = 8;
+              return [ 3, 9 ];
 
              case 8:
+              this.isClickable = true;
+              console.log("onTileClicked exit (no callback) [" + this.row + "," + this.col + "] at " + Date.now());
+              _a.label = 9;
+
+             case 9:
               return [ 2 ];
             }
           });
@@ -2405,6 +2427,25 @@ window.__require = function e(t, n, r) {
       };
       TileViewController.prototype.getCol = function() {
         return this.col;
+      };
+      TileViewController.prototype.BlinkColor = function(color) {
+        return __awaiter(this, void 0, Promise, function() {
+          var _this = this;
+          return __generator(this, function(_a) {
+            this.label.node.color = color;
+            cc.tween(this.node).to(.1, {
+              scale: 1.1
+            }).to(.1, {
+              scale: 1
+            }).start();
+            return [ 2, new Promise(function(resolve) {
+              return setTimeout(resolve, 1e3);
+            }).then(function() {
+              _this.node.scale = 1;
+              _this.label.node.color = cc.Color.WHITE;
+            }) ];
+          });
+        });
       };
       __decorate([ property({
         type: TileType_1.TileType
