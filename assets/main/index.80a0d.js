@@ -224,7 +224,7 @@ window.__require = function e(t, n, r) {
         this.boardState.initialize(this.config.allowedTiles);
         this.boardService.initializeBoard(this.boardState);
         this.boardViewController.setTileClickCallback(this.onTileClicked.bind(this));
-        this.boardViewController.GenrateBoard(this.config);
+        this.boardViewController.GenrateBoard(this.boardState);
       };
       BoardManager.prototype.onTileClicked = function(row, col) {
         return __awaiter(this, void 0, void 0, function() {
@@ -948,12 +948,13 @@ window.__require = function e(t, n, r) {
           }).start();
         });
       };
-      BoardViewController.prototype.GenrateBoard = function(config) {
+      BoardViewController.prototype.GenrateBoard = function(state) {
         this.tilesPool.forEach(function(element) {
           element.isClickable = true;
+          element.node.active = false;
         });
-        var rows = config.boardRows;
-        var cols = config.boardCols;
+        var rows = state.rows;
+        var cols = state.cols;
         this.tileGrid = [];
         var anchorBasePosition = this.tilesAnchor.position;
         for (var i = 0; i < rows; i++) {
@@ -961,11 +962,18 @@ window.__require = function e(t, n, r) {
           for (var j = 0; j < cols; j++) {
             var tile = this.GetTileFromPool();
             if (tile) {
+              var tileType = state.getTileAt(i, j);
+              var tileData = state.getTileDataByType(tileType);
+              if (!tileData) {
+                console.error("Tile data not found for type " + tileType + " at [" + i + ", " + j + "]");
+                this.tileGrid[i][j] = null;
+                continue;
+              }
               var tilePosition = cc.v3(j * this.tileSize + this.tileOffset, -i * this.tileSize + this.tileOffset).add(anchorBasePosition);
               tile.node.setPosition(tilePosition);
               tile.node.active = true;
               tile.setPosition(i, j, this.onTileClickCallback);
-              tile.updateData(config.allowedTiles[Math.floor(Math.random() * config.allowedTiles.length)]);
+              tile.updateData(tileData);
               this.tileGrid[i][j] = tile;
             }
           }
