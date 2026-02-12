@@ -26,8 +26,13 @@ export default class BoardService {
             return null;
         }
 
+        if (row < 0 || row >= this.boardState.rows || col < 0 || col >= this.boardState.cols) {
+            console.warn(`Tile click out of bounds: [${row}, ${col}]`);
+            return null;
+        }
+
         const tileType = this.boardState.getTileAt(row, col);
-        if (tileType === TileType.None) {
+        if (tileType === null || tileType === TileType.None) {
             return null;
         } 
         
@@ -58,6 +63,14 @@ export default class BoardService {
     }
  
     private findMatchingTiles(startRow: number, startCol: number, tileType: TileType): Array<{ row: number, col: number }> {
+        if (!this.boardState) {
+            return [];
+        }
+
+        if (startRow < 0 || startRow >= this.boardState.rows || startCol < 0 || startCol >= this.boardState.cols) {
+            return [];
+        }
+
         const visited: boolean[][] = [];
         for (let i = 0; i < this.boardState.rows; i++) {
             visited[i] = [];
@@ -76,8 +89,7 @@ export default class BoardService {
     }
  
     private floodFill(row: number, col: number, tileType: TileType, visited: boolean[][], result: Array<{ row: number, col: number }>) {
-        
-        if (row < 0 || row >= this.boardState.rows || col < 0 || col >= this.boardState.cols) {
+        if (!this.boardState) {
             return;
         }
 
