@@ -5,7 +5,6 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import GameConfig from "../Core/GameConfig";
 import TileViewController, { TileClickCallback } from "./TileViewController";
 import BoardState from "../Core/BoardState";
 
@@ -163,16 +162,14 @@ export default class BoardViewController extends cc.Component {
     }
 
 
-    public GenrateBoard(config: GameConfig) {
-
-
-
+    public GenrateBoard(state: BoardState) {
         this.tilesPool.forEach(element => {
             element.isClickable = true;
+            element.node.active = false;
         });
 
-        const rows = config.boardRows;
-        const cols = config.boardCols;
+        const rows = state.rows;
+        const cols = state.cols;
 
         this.tileGrid = [];
 
@@ -182,12 +179,20 @@ export default class BoardViewController extends cc.Component {
             for (let j = 0; j < cols; j++) {
                 const tile = this.GetTileFromPool();
                 if (tile) {
+                    const tileType = state.getTileAt(i, j);
+                    const tileData = state.getTileDataByType(tileType);
+
+                    if (!tileData) {
+                        console.error(`Tile data not found for type ${tileType} at [${i}, ${j}]`);
+                        this.tileGrid[i][j] = null;
+                        continue;
+                    }
 
                     var tilePosition = cc.v3(j * this.tileSize + this.tileOffset, -i * this.tileSize + this.tileOffset).add(anchorBasePosition);
                     tile.node.setPosition(tilePosition);
                     tile.node.active = true;
                     tile.setPosition(i, j, this.onTileClickCallback);
-                    tile.updateData(config.allowedTiles[Math.floor(Math.random() * config.allowedTiles.length)]);
+                    tile.updateData(tileData);
                     this.tileGrid[i][j] = tile;
                 }
             }

@@ -70,7 +70,7 @@ export class BoardManager extends ManagerBase {
 
         this.boardViewController.setTileClickCallback(this.onTileClicked.bind(this));
 
-        this.boardViewController.GenrateBoard(this.config);
+        this.boardViewController.GenrateBoard(this.boardState);
     }
 
 
